@@ -12,7 +12,7 @@ const Navbar = () => {
         <input
           type="text"
           placeholder="Type here"
-          className="input input-bordered w-full h-10 pl-10 max-lg:hidden border-[#14213D] rounded-lg"
+          className="input input-bordered w-full h-10 pl-10 max-sm:w-[250px] border-[#14213D] rounded-lg"
         />
         <button className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded hover:bg-blue-600">
           Search
