@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "../Components/Navbar";
 import Questions from "../Components/Question";
 import { QuestionData } from "../Components/Question";
+import Link from "next/link";
 
 const Main = async () => {
   const questions = await fetch('https://nunu29.pythonanywhere.com/questions/')
@@ -20,7 +21,13 @@ const Main = async () => {
             <p>No questions available</p>
           ) : (
             questions.map((item: QuestionData) => (
-              <Questions key={item.id} item={item} /> 
+              <div className="w-full"> 
+              <Link key={item.id} href={`/main/${item.id}`} passHref>
+                
+                  <Questions item={item} />
+                
+              </Link>
+              </div>
             ))
           )}
         </div>
