@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "@/app/Components/Navbar";
 
 interface Answer {
   user: string;
@@ -43,7 +42,7 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
     if (!question) {
       return (
         <>
-          <Navbar />
+          
           <main className="flex flex-col min-h-screen justify-center gap-5 bg-blue-400 p-4">
             <div className="flex flex-col items-center gap-4 w-full">
               <h1 className="text-2xl font-semibold">Page Not Found</h1>
@@ -56,7 +55,6 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
 
     return (
       <>
-        <Navbar />
         <main className="flex flex-col min-h-screen justify-center gap-5 bg-blue-400 p-4">
           <div className="flex flex-col items-center gap-4 w-full">
             <h1 className="text-2xl font-semibold">{question.subject}</h1>
@@ -92,7 +90,6 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
   } catch (err) {
     return (
       <>
-        <Navbar />
         <main className="flex flex-col min-h-screen justify-center gap-5 bg-blue-400 p-4">
           <div className="flex flex-col items-center gap-4 w-full">
             <h1 className="text-2xl font-semibold">Error</h1>

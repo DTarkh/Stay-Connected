@@ -1,7 +1,6 @@
 import React from "react";
-import Navbar from "../Components/Navbar";
-import Questions from "../Components/Question";
-import { QuestionData } from "../Components/Question";
+import Questions from "../../Components/Question";
+import { QuestionData } from "../../Components/Question";
 import Link from "next/link";
 
 const Main = async () => {
@@ -14,8 +13,7 @@ const Main = async () => {
 
   return (
     <>
-      <Navbar />
-      <main className="flex w-full justify-center gap-5 bg-blue-400">
+      <main className="flex w-full justify-center gap-5 ">
         <div className="flex flex-col items-center gap-4 mt-4">
           {questions.length === 0 ? (
             <p>No questions available</p>
