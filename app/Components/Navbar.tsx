@@ -5,14 +5,32 @@ import { PiPlugsConnected } from "react-icons/pi";
 import { CiSearch } from "react-icons/ci";
 import { CiSquarePlus } from "react-icons/ci";
 import AddQuestion from "./AddQuestion";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAddQuestionMenuOpen, setIsAddQuestionMenuOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const tags = ["#React", "#Frontend", "#Fetching"];
 
-  const handleTagClick = (tag) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+
+  };
+  
+
+  const handleSearch = () => {
+    
+    if (searchInput.length > 0) {
+      router.push(`/main?search=${searchInput}`);
+    } else{
+      router.push(`/main`);
+    }
+    setSearchInput("");
+  };
+
+  const handleTagClick = (tag: string) => {
     setSearchInput(tag); // Set the search input to the clicked tag
     setIsMenuOpen(false); // Close the menu
   };
@@ -29,10 +47,14 @@ const Navbar = () => {
           type="text"
           placeholder="Type here"
           value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
+          onChange={handleChange}
           className="input input-bordered w-full h-10 pl-10 max-sm:w-[250px] border-[#14213D] rounded-lg"
         />
-        <button className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded hover:bg-blue-600">
+        <button
+          type="submit"
+          onClick={handleSearch}
+          className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded hover:bg-blue-600"
+        >
           Search
         </button>
       </div>

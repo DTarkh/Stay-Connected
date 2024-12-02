@@ -1,30 +1,43 @@
 import React from "react";
-import Questions from "../../Components/Question";
-import { QuestionData } from "../../Components/Question";
+import Questions, { QuestionData } from "../../Components/Question";
 import Link from "next/link";
 
-const Main = async () => {
-  const questions = await fetch('https://nunu29.pythonanywhere.com/questions/')
-    .then((res) => res.json())
-    .catch((err) => {
-      console.error("Error:", err);
-      return [];
-    });
+interface Props {
+  searchParams: { search?: string };
+}
+
+const Main = async ({ searchParams }: Props) => {
+  const { search } = searchParams;
+  console.log("search value:", search);
+
+  let questions: QuestionData[] = [];
+
+  try {
+    const url = search
+      ? `https://nunu29.pythonanywhere.com/questions/?search=${search}`
+      : `https://nunu29.pythonanywhere.com/questions/`;
+
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    questions = await response.json();
+  } catch (err) {
+    console.error("Error fetching questions:", err);
+  }
 
   return (
     <>
-      <main className="flex w-full justify-center gap-5 ">
+      <main className="flex w-full justify-center gap-5">
         <div className="flex flex-col items-center gap-4 mt-4">
           {questions.length === 0 ? (
             <p>No questions available</p>
           ) : (
             questions.map((item: QuestionData) => (
-              <div className="w-full"> 
-              <Link key={item.id} href={`/main/${item.id}`} passHref>
-                
+              <div className="w-full" key={item.id}>
+                <Link href={`/main/${item.id}`} passHref>
                   <Questions item={item} />
-                
-              </Link>
+                </Link>
               </div>
             ))
           )}
