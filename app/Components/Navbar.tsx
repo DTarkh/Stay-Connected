@@ -14,20 +14,23 @@ const Navbar = () => {
   const [searchInput, setSearchInput] = useState("");
   const tags = ["#React", "#Frontend", "#Fetching"];
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
 
   };
   
 
   const handleSearch = () => {
+    
     if (searchInput.length > 0) {
       router.push(`/main?search=${searchInput}`);
+    } else{
+      router.push(`/main`);
     }
     setSearchInput("");
   };
 
-  const handleTagClick = (tag) => {
+  const handleTagClick = (tag: string) => {
     setSearchInput(tag); // Set the search input to the clicked tag
     setIsMenuOpen(false); // Close the menu
   };
