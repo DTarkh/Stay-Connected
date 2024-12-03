@@ -5,16 +5,36 @@ import { PiPlugsConnected } from "react-icons/pi";
 import { CiSearch } from "react-icons/ci";
 import { CiSquarePlus } from "react-icons/ci";
 import AddQuestion from "./AddQuestion";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const router = useRouter();
+  
+  let currentSearch = "";  
+  
+  const [searchInput, setSearchInput] = useState(currentSearch); 
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAddQuestionMenuOpen, setIsAddQuestionMenuOpen] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
   const tags = ["#React", "#Frontend", "#Fetching"];
 
-  const handleTagClick = (tag) => {
-    setSearchInput(tag); // Set the search input to the clicked tag
-    setIsMenuOpen(false); // Close the menu
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+  };
+
+  const handleSearch = () => {
+    const searchTerm  = searchInput.trim();
+    if (searchTerm .length > 0) {
+      router.push(`/main?search=${encodeURIComponent(searchTerm )}`); 
+    } else {
+      router.push(`/main`); 
+    }
+  };
+  
+
+  const handleTagClick = (tag: string) => {
+    setSearchInput(tag);
+    setIsMenuOpen(false);
   };
 
   return (
@@ -29,10 +49,14 @@ const Navbar = () => {
           type="text"
           placeholder="Type here"
           value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          className="input input-bordered w-full h-10 pl-10 max-sm:w-[250px] border-[#14213D] rounded-lg"
+          onChange={handleChange}
+          className="input input-bordered w-full h-10 pl-10 max-sm:w-[250px] border-[#14213D] rounded-lg text-black"
         />
-        <button className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded hover:bg-blue-600">
+        <button
+          type="submit"
+          onClick={handleSearch}
+          className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded hover:bg-blue-600"
+        >
           Search
         </button>
       </div>
@@ -59,9 +83,9 @@ const Navbar = () => {
         )}
       </div>
 
-      <div className="">
+      <div className="relative">
         <CiSquarePlus
-          className="text-4xl"
+          className="text-4xl cursor-pointer"
           onClick={() => setIsAddQuestionMenuOpen((prev) => !prev)}
         />
         {isAddQuestionMenuOpen && (
