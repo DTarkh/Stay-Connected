@@ -9,30 +9,32 @@ import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const router = useRouter();
+  
+  let currentSearch = "";  
+  
+  const [searchInput, setSearchInput] = useState(currentSearch); 
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAddQuestionMenuOpen, setIsAddQuestionMenuOpen] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
   const tags = ["#React", "#Frontend", "#Fetching"];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
+  };
 
+  const handleSearch = () => {
+    const searchTerm  = searchInput.trim();
+    if (searchTerm .length > 0) {
+      router.push(`/main?search=${encodeURIComponent(searchTerm )}`); 
+    } else {
+      router.push(`/main`); 
+    }
   };
   
 
-  const handleSearch = () => {
-    
-    if (searchInput.length > 0) {
-      router.push(`/main?search=${searchInput}`);
-    } else{
-      router.push(`/main`);
-    }
-    setSearchInput("");
-  };
-
   const handleTagClick = (tag: string) => {
-    setSearchInput(tag); // Set the search input to the clicked tag
-    setIsMenuOpen(false); // Close the menu
+    setSearchInput(tag);
+    setIsMenuOpen(false);
   };
 
   return (
@@ -48,7 +50,7 @@ const Navbar = () => {
           placeholder="Type here"
           value={searchInput}
           onChange={handleChange}
-          className="input input-bordered w-full h-10 pl-10 max-sm:w-[250px] border-[#14213D] rounded-lg"
+          className="input input-bordered w-full h-10 pl-10 max-sm:w-[250px] border-[#14213D] rounded-lg text-black"
         />
         <button
           type="submit"
@@ -81,9 +83,9 @@ const Navbar = () => {
         )}
       </div>
 
-      <div className="">
+      <div className="relative">
         <CiSquarePlus
-          className="text-4xl"
+          className="text-4xl cursor-pointer"
           onClick={() => setIsAddQuestionMenuOpen((prev) => !prev)}
         />
         {isAddQuestionMenuOpen && (
