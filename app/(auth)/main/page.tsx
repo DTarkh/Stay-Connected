@@ -48,7 +48,7 @@ const Main = async ({ searchParams }: Props) => {
           ))
         )}
       </div>
-      <div className="border-2 border-current max-lg:hidden w-[400px] h-[90vh] mt-4 rounded-xl flex flex-col items-center p-4">
+      <div className="border-2 border-current max-lg:hidden  mt-4 rounded-xl flex flex-col items-center p-4 overflow-auto">
         <Ratings />
       </div>
     </main>

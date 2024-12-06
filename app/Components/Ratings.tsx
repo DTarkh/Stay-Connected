@@ -30,7 +30,7 @@ const Ratings = async () => {
   const users = await fetchLeaderboard(); 
 
   return (
-    <div className="w-full bg-white rounded-xl shadow-lg p-4 max-h-[90vh] overflow-auto text-black">
+    <div className="w-full bg-white rounded-xl shadow-lg p-4  text-black">
       <h2 className="text-2xl font-semibold text-center mb-6">Top 10 Users</h2>
       <div className="space-y-4">
         {users.length === 0 ? (
