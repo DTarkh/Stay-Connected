@@ -136,12 +136,12 @@ const Navbar = () => {
           className="text-4xl cursor-pointer"
           onClick={() => setIsAddQuestionMenuOpen((prev) => !prev)}
         />
+      </div>
         {isAddQuestionMenuOpen && (
-          <div className="absolute bg-opacity-50 bg-slate-900 w-full h-[100vh] flex justify-center items-center left-0 top-0">
-            <AddQuestion />
+          <div className="absolute bg-opacity-50 bg-slate-900 w-[100%] h-[100vh] flex justify-center items-center left-0 top-0 z-10">
+            <AddQuestion setIsAddQuestionMenuOpen={setIsAddQuestionMenuOpen}/>
           </div>
         )}
-      </div>
     </nav>
   );
 };
