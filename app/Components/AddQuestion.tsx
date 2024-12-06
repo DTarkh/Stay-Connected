@@ -7,25 +7,19 @@ interface Props {
 }
 
 const AddQuestion = ({ setIsAddQuestionMenuOpen }: Props) => {
-  const [title, setTitle] = useState(""); // State for question title
-  const [description, setDescription] = useState(""); // State for question description
+  const [title, setTitle] = useState(""); 
+  const [description, setDescription] = useState(""); 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-  
-    console.log(title); // This will now log correctly
-    console.log(description);
-    console.log(selectedTags);
-  
-    // Prepare the data payload
+    e.preventDefault()
+ 
     const payload = {
-      subject: title, // Fixed typo: removed extra colon
+      subject: title, 
       body: description,
-      tags: selectedTags, // Removed extra array nesting
+      tags: selectedTags, 
     };
   
-    console.log(payload); // This will also log correctly
   
     const accessToken =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMzNDk4MjE0LCJpYXQiOjE3MzM0OTQ2MTQsImp0aSI6IjJmOGEwNzdiNDRmNzQwMjg4ZTIyZTAwYWJhODlhMTI4IiwidXNlcl9pZCI6MTd9.kHX7BlYE7jAm8UemYtnfWwyFlWfKuwHmCXDMCNRRVUs";
@@ -37,7 +31,7 @@ const AddQuestion = ({ setIsAddQuestionMenuOpen }: Props) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`, // Include the access token
+            Authorization: `Bearer ${accessToken}`, 
           },
           body: JSON.stringify(payload),
         }
