@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import TagComponent from "@/app/Components/TagComponent"
 
 interface Props {
   setIsAddQuestionMenuOpen: (isOpen: boolean) => void;
@@ -9,20 +10,25 @@ const AddQuestion = ({ setIsAddQuestionMenuOpen }: Props) => {
   const [title, setTitle] = useState(""); // State for question title
   const [description, setDescription] = useState(""); // State for question description
 
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Add your logic to handle the form submission
     console.log("Title:", title);
     console.log("Description:", description);
+    console.log("Selected Tags:", selectedTags);
     // Clear the form fields after submission
     setTitle("");
     setDescription("");
+    setSelectedTags([])
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-[700px] h-[60vh] mx-auto bg-white p-6 shadow-md rounded-md flex flex-col justify-center gap-6 relative"
+      className="w-[700px] h-[80vh] mx-auto bg-white p-6 shadow-md rounded-md flex flex-col justify-center gap-6 relative"
     >
       <button
         type="button"
@@ -83,6 +89,7 @@ const AddQuestion = ({ setIsAddQuestionMenuOpen }: Props) => {
       >
         Create
       </button>
+      <TagComponent selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
     </form>
   );
 };
