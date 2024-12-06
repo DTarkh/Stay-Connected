@@ -1,5 +1,6 @@
 import React from "react";
 import { FaThumbsUp, FaThumbsDown } from "react-icons/fa"; 
+
 interface TagDetail {
   name: string;
 }
@@ -62,14 +63,29 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
     const answers = Array.isArray(question.answers) ? question.answers : [];
 
     return (
-      <main className="flex flex-col min-h-screen justify-center gap-5 bg-blue-400 p-4">
-        <div className="flex flex-col items-center gap-4 w-full">
-          <h1 className="text-2xl font-semibold">{question.subject}</h1>
+      <main className="flex flex-col min-h-screen justify-center gap-5 bg-blue-400 p-4 mx-12">
+        <div className="flex flex-col items-start gap-4 w-full">
+          {/* Question Title, Likes, Dislikes, User, Date */}
+          <div className="flex justify-between w-full">
+            <h1 className="text-2xl font-semibold">{question.subject}</h1>
+            <div className="flex gap-4 items-center text-sm text-gray-500">
+              <div className="flex items-center">
+                <FaThumbsUp className="text-blue-600" />
+                <span>{question.like_count}</span>
+              </div>
+              <div className="flex items-center">
+                <FaThumbsDown className="text-red-600" />
+                <span>{question.dislike_count}</span>
+              </div>
+              <p>{question.user}</p>
+              <p>{question.created_at}</p>
+            </div>
+          </div>
+
+          {/* Question Body */}
           <p className="text-lg">{question.body}</p>
-          <p className="text-sm text-gray-500">
-            {question.user}
-          </p>
-          
+
+          {/* Tags Section */}
           <div className="mt-4">
             <strong>Tags:</strong>
             <ul className="flex gap-2 flex-wrap">
@@ -87,41 +103,34 @@ const QuestionDetailPage = async ({ params }: { params: { id: string } }) => {
               )}
             </ul>
           </div>
-          <div className="flex gap-4 mt-4">
-            <div className="flex items-center">
-              <FaThumbsUp className="text-blue-600" />
-              <span>{question.like_count}</span>
-            </div>
-            <div className="flex items-center">
-              <FaThumbsDown className="text-red-600" />
-              <span>{question.dislike_count}</span>
-            </div>
-          </div>
+        </div>
 
-          <div className="mt-6 w-full">
-            <h2 className="text-xl font-semibold">Answers ({question.number_of_answers})</h2>
-            {answers.length > 0 ? (
-              answers.map((answer) => (
-                <div key={answer.id} className="border-2 p-4 rounded-lg mb-4">
-                  <p><strong>{answer.user}</strong></p>
-                  <p>{answer.body}</p>
-                  <div className="flex gap-4 mt-4">
-                    <div className="flex items-center">
-                      <FaThumbsUp className="text-blue-600" />
-                      <span>{answer.like_count}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <FaThumbsDown className="text-red-600" />
-                      <span>{answer.dislike_count}</span>
-                    </div>
+        {/* Answers Section */}
+        <div className="mt-6 w-full border-2 border-gray-700 p-4 rounded-lg">
+          <h2 className="text-xl font-semibold">Answers ({question.number_of_answers})</h2>
+          {answers.length > 0 ? (
+            answers.map((answer) => (
+              <div key={answer.id} className="border-b-2 p-4">
+                <p>{answer.body}</p>
+
+                {/* Answer Like, Dislike, User, Date */}
+                <div className="flex justify-end items-center gap-4 mt-4 text-sm text-gray-500">
+                  <div className="flex items-center">
+                    <FaThumbsUp className="text-blue-600" />
+                    <span>{answer.like_count}</span>
                   </div>
-                  <p className="text-sm text-gray-500">{answer.created_at}</p>
+                  <div className="flex items-center">
+                    <FaThumbsDown className="text-red-600" />
+                    <span>{answer.dislike_count}</span>
+                  </div>
+                  <p>{answer.user}</p>
+                  <p>{answer.created_at}</p>
                 </div>
-              ))
-            ) : (
-              <p>No answers yet.</p>
-            )}
-          </div>
+              </div>
+            ))
+          ) : (
+            <p>No answers yet.</p>
+          )}
         </div>
       </main>
     );
