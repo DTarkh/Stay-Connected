@@ -1,5 +1,9 @@
 export async function fetchQuestion(id: string) {
-    const res = await fetch(`https://nunu29.pythonanywhere.com/questions/${id}/`);
+    const res = await fetch(`https://nunu29.pythonanywhere.com/questions/${id}/`, {
+      headers: {
+        'Cache-Control': 'no-cache', 
+      },
+    });
   
     if (res.status === 404) {
       return null;
