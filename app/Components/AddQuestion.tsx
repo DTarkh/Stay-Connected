@@ -12,31 +12,44 @@ const AddQuestion = ({ setIsAddQuestionMenuOpen }: Props) => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+    e.preventDefault(); // Prevent the default form submission behavior
+  
+    console.log(title); // This will now log correctly
+    console.log(description);
+    console.log(selectedTags);
+  
     // Prepare the data payload
     const payload = {
-      title,
-      description,
-      tags: selectedTags, // Adjust the key name based on your backend requirement
+      subject: title, // Fixed typo: removed extra colon
+      body: description,
+      tags: selectedTags, // Removed extra array nesting
     };
-
+  
+    console.log(payload); // This will also log correctly
+  
+    const accessToken =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMzNDk4MjE0LCJpYXQiOjE3MzM0OTQ2MTQsImp0aSI6IjJmOGEwNzdiNDRmNzQwMjg4ZTIyZTAwYWJhODlhMTI4IiwidXNlcl9pZCI6MTd9.kHX7BlYE7jAm8UemYtnfWwyFlWfKuwHmCXDMCNRRVUs";
+  
     try {
-      const response = await fetch("https://nunu29.pythonanywhere.com/questions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
+      const response = await fetch(
+        "https://nunu29.pythonanywhere.com/questions/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`, // Include the access token
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+  
       if (!response.ok) {
         throw new Error("Failed to submit the question");
       }
-
+  
       const data = await response.json();
       console.log("Question submitted successfully:", data);
-
+  
       // Reset form fields
       setTitle("");
       setDescription("");
