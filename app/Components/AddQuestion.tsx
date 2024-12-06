@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import TagComponent from "@/app/Components/TagComponent"
+import TagComponent from "@/app/Components/TagComponent";
 
 interface Props {
   setIsAddQuestionMenuOpen: (isOpen: boolean) => void;
@@ -9,20 +9,42 @@ interface Props {
 const AddQuestion = ({ setIsAddQuestionMenuOpen }: Props) => {
   const [title, setTitle] = useState(""); // State for question title
   const [description, setDescription] = useState(""); // State for question description
-
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Add your logic to handle the form submission
-    console.log("Title:", title);
-    console.log("Description:", description);
-    console.log("Selected Tags:", selectedTags);
-    // Clear the form fields after submission
-    setTitle("");
-    setDescription("");
-    setSelectedTags([])
+
+    // Prepare the data payload
+    const payload = {
+      title,
+      description,
+      tags: selectedTags, // Adjust the key name based on your backend requirement
+    };
+
+    try {
+      const response = await fetch("https://nunu29.pythonanywhere.com/questions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit the question");
+      }
+
+      const data = await response.json();
+      console.log("Question submitted successfully:", data);
+
+      // Reset form fields
+      setTitle("");
+      setDescription("");
+      setSelectedTags([]);
+      setIsAddQuestionMenuOpen(false); // Close the form
+    } catch (error) {
+      console.error("Error submitting the question:", error);
+    }
   };
 
   return (
@@ -83,13 +105,16 @@ const AddQuestion = ({ setIsAddQuestionMenuOpen }: Props) => {
           required
         />
       </div>
+      <TagComponent
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
+      />
       <button
         type="submit"
         className="w-full px-4 py-4 bg-sky-700 text-white font-semibold rounded-2xl hover:bg-cyan-600"
       >
         Create
       </button>
-      <TagComponent selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
     </form>
   );
 };
