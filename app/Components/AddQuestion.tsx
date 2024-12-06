@@ -7,36 +7,43 @@ interface Props {
 }
 
 const AddQuestion = ({ setIsAddQuestionMenuOpen }: Props) => {
-  const [title, setTitle] = useState(""); // State for question title
-  const [description, setDescription] = useState(""); // State for question description
+  const [title, setTitle] = useState(""); 
+  const [description, setDescription] = useState(""); 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    // Prepare the data payload
+    e.preventDefault()
+ 
     const payload = {
-      title,
-      description,
-      tags: selectedTags, // Adjust the key name based on your backend requirement
+      subject: title, 
+      body: description,
+      tags: selectedTags, 
     };
-
+  
+  
+    const accessToken =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMzNDk4MjE0LCJpYXQiOjE3MzM0OTQ2MTQsImp0aSI6IjJmOGEwNzdiNDRmNzQwMjg4ZTIyZTAwYWJhODlhMTI4IiwidXNlcl9pZCI6MTd9.kHX7BlYE7jAm8UemYtnfWwyFlWfKuwHmCXDMCNRRVUs";
+  
     try {
-      const response = await fetch("https://nunu29.pythonanywhere.com/questions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
+      const response = await fetch(
+        "https://nunu29.pythonanywhere.com/questions/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`, 
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+  
       if (!response.ok) {
         throw new Error("Failed to submit the question");
       }
-
+  
       const data = await response.json();
       console.log("Question submitted successfully:", data);
-
+  
       // Reset form fields
       setTitle("");
       setDescription("");
