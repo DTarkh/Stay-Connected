@@ -16,7 +16,8 @@ interface Question {
   like_count: number;
   dislike_count: number;
   created_at: string;
-  answers: any[];
+  answers: any[];  
+  number_of_answers: number;  
 }
 
 interface Props {
@@ -52,7 +53,7 @@ const QuestionDetailPage = async ({ params }: Props) => {
   return (
     <main className="flex flex-col min-h-screen justify-center gap-5 bg-blue-400 p-4 mx-12">
       <QuestionDetails question={question} />
-      <AnswerList answers={question.answers} />
+      <AnswerList answers={question.answers} number_of_answers={question.number_of_answers} /> 
       <AddAnswerForm
         questionId={question.id.toString()}
         accessToken={accessToken}

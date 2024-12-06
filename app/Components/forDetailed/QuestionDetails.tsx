@@ -14,6 +14,7 @@ interface Question {
   like_count: number;
   dislike_count: number;
   created_at: string;
+  number_of_answers: number;  
 }
 
 const QuestionDetails = ({ question }: { question: Question }) => (
