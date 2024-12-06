@@ -66,7 +66,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex bg-cyan-500 px-10 py-3 items-center gap-5">
+    <nav className="flex bg-cyan-500 px-10 py-3 items-center gap-5  max-sm:flex-col">
       {/* Home Button */}
       <button
         className="bg-transparent border-none cursor-pointer"
@@ -76,7 +76,7 @@ const Navbar = () => {
       </button>
 
       {/* Search Field */}
-      <div className="relative w-[40vw] ml-5 flex items-center gap-3">
+      <div className="relative w-full ml-5 flex items-center gap-3">
         <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
           <CiSearch size={20} className="max-lg:hidden" />
         </span>
@@ -85,15 +85,15 @@ const Navbar = () => {
           placeholder="Type here"
           value={searchInput}
           onChange={handleChange}
-          className="input input-bordered w-full h-10 pl-10 max-sm:w-[250px] border-[#14213D] rounded-lg text-black"
+          className="input input-bordered w-full h-10 pl-10  border-[#14213D] rounded-lg text-black"
         />
       </div>
 
       {/* Choose Tag Button */}
-      <div className="relative">
+      <div className="relative flex items-center gap-4">
         <button
           onClick={() => setIsMenuOpen((prev) => !prev)}
-          className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded hover:bg-blue-600"
+          className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded hover:bg-blue-600 whitespace-nowrap"
         >
           {selectedTag ? selectedTag : "Choose Tag"}
         </button>
@@ -121,9 +121,9 @@ const Navbar = () => {
             )}
           </ul>
         )}
-      </div>
 
-      {/* Search Button */}
+
+
       <div className="relative">
         <button
           type="submit"
@@ -138,6 +138,10 @@ const Navbar = () => {
       <Link href="/add">
         <CiSquarePlus className="text-4xl cursor-pointer" />
       </Link>
+
+      </div>
+
+      {/* Search Button */}
     </nav>
   );
 };

@@ -58,7 +58,7 @@ const AddQuestion = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-[700px] h-[80vh] mx-auto bg-white p-6 shadow-md rounded-md flex flex-col justify-center gap-6 relative"
+      className="w-[700px] h-[80vh] mx-auto bg-white p-6 shadow-md rounded-md flex flex-col justify-center gap-6 relative mt-10"
     >
       <button
         type="button"
