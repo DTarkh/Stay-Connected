@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import TagComponent from "@/app/Components/TagComponent";
+import { redirect } from "next/navigation";
 
 
 
@@ -46,7 +47,9 @@ const AddQuestion = () => {
       setTitle("");
       setDescription("");
       setSelectedTags([]);
-      setIsAddQuestionMenuOpen(false); // Close the form
+      redirect("/main")
+
+    
     } catch (error) {
       console.error("Error submitting the question:", error);
     }
@@ -55,12 +58,12 @@ const AddQuestion = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-[700px] h-[80vh] mx-auto bg-white p-6 shadow-md rounded-md flex flex-col justify-center gap-6 relative"
+      className="w-[700px] h-[80vh] mx-auto bg-white p-6 shadow-md rounded-md flex flex-col justify-center gap-6 relative mt-10"
     >
       <button
         type="button"
         className="btn btn-square absolute top-3 right-3"
-        onClick={() => setIsAddQuestionMenuOpen(false)}
+    
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
