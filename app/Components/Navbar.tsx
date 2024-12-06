@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useState, useEffect } from "react";
 import { PiPlugsConnected } from "react-icons/pi";
 import { CiSearch } from "react-icons/ci";
@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 const Navbar = () => {
   const router = useRouter();
   const [searchInput, setSearchInput] = useState("");
-  const [selectedTag, setSelectedTag] = useState<string | null>(null); 
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAddQuestionMenuOpen, setIsAddQuestionMenuOpen] = useState(false);
   const [tags, setTags] = useState<any[]>([]);
@@ -40,7 +40,7 @@ const Navbar = () => {
     const searchTerm = searchInput.trim();
     const tagQuery = selectedTag ? `tag=${encodeURIComponent(selectedTag)}` : "";
     const searchQuery = searchTerm ? `search=${encodeURIComponent(searchTerm)}` : "";
-  
+
     let finalUrl = "/main"; 
     if (searchQuery || tagQuery) {
       finalUrl += "?"; 
@@ -49,12 +49,9 @@ const Navbar = () => {
       if (tagQuery) queries.push(tagQuery);
       finalUrl += queries.join("&");
     }
-  
-    console.log("Navigating to:", finalUrl);
-  
+
     router.push(finalUrl);
   };
-  
 
   const handleTagClick = (tag: string) => {
     setSelectedTag(tag === "No tag" ? null : tag);
@@ -90,7 +87,7 @@ const Navbar = () => {
           onClick={() => setIsMenuOpen((prev) => !prev)}
           className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded hover:bg-blue-600"
         >
-          Choose Tag
+          {selectedTag ? selectedTag : "Choose Tag"}
         </button>
         {isMenuOpen && (
           <ul className="absolute mt-2 bg-white shadow-lg rounded p-2 z-10 text-black max-h-60 overflow-auto">
