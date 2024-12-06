@@ -1,10 +1,11 @@
-'use client';
+"use client";
 import { useState, useEffect } from "react";
 import { PiPlugsConnected } from "react-icons/pi";
 import { CiSearch } from "react-icons/ci";
 import { CiSquarePlus } from "react-icons/ci";
 import AddQuestion from "./AddQuestion";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Navbar = () => {
   const router = useRouter();
@@ -38,12 +39,16 @@ const Navbar = () => {
 
   const handleSearch = () => {
     const searchTerm = searchInput.trim();
-    const tagQuery = selectedTag ? `tag=${encodeURIComponent(selectedTag)}` : "";
-    const searchQuery = searchTerm ? `search=${encodeURIComponent(searchTerm)}` : "";
+    const tagQuery = selectedTag
+      ? `tag=${encodeURIComponent(selectedTag)}`
+      : "";
+    const searchQuery = searchTerm
+      ? `search=${encodeURIComponent(searchTerm)}`
+      : "";
 
-    let finalUrl = "/main"; 
+    let finalUrl = "/main";
     if (searchQuery || tagQuery) {
-      finalUrl += "?"; 
+      finalUrl += "?";
       const queries = [];
       if (searchQuery) queries.push(searchQuery);
       if (tagQuery) queries.push(tagQuery);
@@ -62,7 +67,6 @@ const Navbar = () => {
 
   return (
     <nav className="flex bg-cyan-500 px-10 py-3 items-center gap-5">
-
       {/* Home Button */}
       <button
         className="bg-transparent border-none cursor-pointer"
@@ -131,17 +135,9 @@ const Navbar = () => {
       </div>
 
       {/* Add Question Button */}
-      <div className="relative">
-        <CiSquarePlus
-          className="text-4xl cursor-pointer"
-          onClick={() => setIsAddQuestionMenuOpen((prev) => !prev)}
-        />
-      </div>
-        {isAddQuestionMenuOpen && (
-          <div className="absolute bg-opacity-50 bg-slate-900 w-[100%] h-[100vh] flex justify-center items-center left-0 top-0 z-10">
-            <AddQuestion setIsAddQuestionMenuOpen={setIsAddQuestionMenuOpen}/>
-          </div>
-        )}
+      <Link href="/add">
+        <CiSquarePlus className="text-4xl cursor-pointer" />
+      </Link>
     </nav>
   );
 };
