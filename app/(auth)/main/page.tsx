@@ -3,21 +3,32 @@ import Questions, { QuestionData } from "../../Components/Question";
 import Link from "next/link";
 
 interface Props {
-  searchParams: { search?: string };
+  searchParams: { search?: string; tag?: string }; 
 }
 
 const Main = async ({ searchParams }: Props) => {
-  const search = searchParams.search || ""; 
+  const search = searchParams.search || "";
+  const tag = searchParams.tag || ""; 
+  let url = "https://nunu29.pythonanywhere.com/questions/";
+  const queryParams: string[] = [];
 
-  const url = `https://nunu29.pythonanywhere.com/questions/${search ? `?search=${search}` : ""}`;
+  if (search) queryParams.push(`search=${search}`);
+  if (tag) queryParams.push(`tags=${tag}`);
+  if (queryParams.length > 0) {
+    url += `?${queryParams.join("&")}`;
+  }
+  console.log("Fetching from URL:", url);
 
   let questions: QuestionData[] = [];
   try {
-    const response = await fetch(url, { cache: "no-store" }); 
+    const response = await fetch(url, { cache: "no-store" });
+    console.log("Fetch response status:", response.status);
+    
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     questions = await response.json();
+
   } catch (err) {
     console.error("Error fetching questions:", err);
   }
