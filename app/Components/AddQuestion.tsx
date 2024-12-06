@@ -1,10 +1,15 @@
-'use client'
+"use client";
 import { useState } from "react";
-const AddQuestion = () => {
-    const [title, setTitle] = useState(""); // State for question title
+
+interface Props {
+  setIsAddQuestionMenuOpen: (isOpen: boolean) => void;
+}
+
+const AddQuestion = ({ setIsAddQuestionMenuOpen }: Props) => {
+  const [title, setTitle] = useState(""); // State for question title
   const [description, setDescription] = useState(""); // State for question description
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Add your logic to handle the form submission
     console.log("Title:", title);
@@ -13,11 +18,32 @@ const AddQuestion = () => {
     setTitle("");
     setDescription("");
   };
+
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-[700px] h-[60vh]  mx-auto bg-white p-6 shadow-md rounded-md  flex flex-col justify-center gap-6"
+      className="w-[700px] h-[60vh] mx-auto bg-white p-6 shadow-md rounded-md flex flex-col justify-center gap-6 relative"
     >
+      <button
+        type="button"
+        className="btn btn-square absolute top-3 right-3"
+        onClick={() => setIsAddQuestionMenuOpen(false)}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
       <div className="mb-4">
         <label
           htmlFor="title"
@@ -48,7 +74,6 @@ const AddQuestion = () => {
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Enter the question description"
           className="w-full px-4 py-2 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-          rows="4"
           required
         />
       </div>
@@ -59,7 +84,7 @@ const AddQuestion = () => {
         Create
       </button>
     </form>
-  )
-}
+  );
+};
 
-export default AddQuestion
+export default AddQuestion;
