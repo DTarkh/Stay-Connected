@@ -1,14 +1,15 @@
 import React from "react";
 import Questions, { QuestionData } from "../../Components/Question";
 import Link from "next/link";
+import Ratings from "../../Components/Ratings";
 
 interface Props {
-  searchParams: { search?: string; tag?: string }; 
+  searchParams: { search?: string; tag?: string };
 }
 
 const Main = async ({ searchParams }: Props) => {
   const search = searchParams.search || "";
-  const tag = searchParams.tag || ""; 
+  const tag = searchParams.tag || "";
   let url = "https://nunu29.pythonanywhere.com/questions/";
   const queryParams: string[] = [];
 
@@ -23,12 +24,11 @@ const Main = async ({ searchParams }: Props) => {
   try {
     const response = await fetch(url, { cache: "no-store" });
     console.log("Fetch response status:", response.status);
-    
+
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     questions = await response.json();
-
   } catch (err) {
     console.error("Error fetching questions:", err);
   }
@@ -49,8 +49,7 @@ const Main = async ({ searchParams }: Props) => {
         )}
       </div>
       <div className="border-2 border-current max-lg:hidden w-[400px] h-[90vh] mt-4 rounded-xl flex flex-col items-center p-4">
-        <h2 className="text-lg font-semibold">Rating</h2>
-        <div className="mt-4"></div>
+        <Ratings />
       </div>
     </main>
   );
