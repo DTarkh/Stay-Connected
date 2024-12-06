@@ -5,7 +5,7 @@ export interface QuestionData {
   user: string;
   subject: string;
   body: string;
-  tags: string[];
+  tag_details: { name: string }[]; 
   number_of_answers: number;
   created_at: string; 
 }
@@ -19,12 +19,12 @@ const Questions = ({ item }: { item: QuestionData }) => {
       </p>
       <p className="text-sm text-gray-800 mt-2">{item.body}</p>
       <div className="flex gap-2 mt-2 flex-wrap">
-        {item.tags.map((tag, index) => (
+        {item.tag_details.map((tag, index) => (
           <span
             key={index}
             className="bg-gray-200 text-gray-700 rounded-full py-1 px-3 text-xs"
           >
-            {tag}
+            {tag.name} 
           </span>
         ))}
       </div>
