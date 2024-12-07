@@ -1,5 +1,6 @@
 'use client'
 import { useState } from "react";
+import Link from "next/link"; 
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -118,6 +119,13 @@ const Register = () => {
         >
           Register
         </button>
+
+        <div className="mt-4 text-center">
+          <p>Already have an account?</p>
+          <Link href="/login">
+            <button className="text-blue-500 underline">Login here</button>
+          </Link>
+        </div>
       </form>
     </div>
   );

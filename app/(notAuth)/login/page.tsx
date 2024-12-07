@@ -2,6 +2,8 @@
 import { useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation"; 
+import Link from "next/link"; 
+
 const Login = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -99,6 +101,13 @@ const Login = () => {
         >
           {isLoading ? 'Logging in...' : 'Login'}
         </button>
+
+        <div className="mt-4 text-center">
+          <p>Don't have an account?</p>
+          <Link href="/register">
+            <button className="text-blue-500 underline">Register here</button>
+          </Link>
+        </div>
       </form>
     </div>
   );
