@@ -7,6 +7,7 @@ if (!BASE_URL) {
 const API_ROUTES = {
     register: `${BASE_URL}/users/register/`,
     login: `${BASE_URL}/users/login/`,
+    submitAnswer: `${BASE_URL}/questions/`,
     // Add other endpoints as needed
 };
 
