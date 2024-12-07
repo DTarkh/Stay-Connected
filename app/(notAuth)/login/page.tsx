@@ -1,7 +1,7 @@
-'use client'
+'use client';
 import { useState } from "react";
 import Cookies from "js-cookie";
-
+import { useRouter } from "next/navigation"; 
 const Login = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -9,6 +9,8 @@ const Login = () => {
   });
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter(); 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -40,6 +42,8 @@ const Login = () => {
       Cookies.set('refreshToken', refreshToken, { expires: 7, secure: true, SameSite: 'Strict' });
 
       setMessage("Login successful!");
+
+      router.push('/main');
     } catch (error) {
       setMessage("Failed to connect to the server.");
       console.error("Error:", error);
