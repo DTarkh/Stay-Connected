@@ -106,8 +106,8 @@ const Login = () => {
               Password
             </label>
             <Link
-              href="/forgotpass"
-              className="text-gray-500 text-sm cursor-pointer"
+              href="/forgotpassword"
+              className="text-blue-500 text-sm cursor-pointer hover:underline"
             >
               Forgot Password?
             </Link>
@@ -148,7 +148,7 @@ const Login = () => {
         <div className="flex items-center justify-between mb-4">
           <span className="text-gray-500 text-sm">New To StayConnected?</span>
           <Link href={"/register"}>
-            <span className="cursor-pointer text-gray-500 text-base font-bold">
+            <span className="cursor-pointer text-blue-500 text-base font-bold hover:underline">
               Sign Up
             </span>
           </Link>
