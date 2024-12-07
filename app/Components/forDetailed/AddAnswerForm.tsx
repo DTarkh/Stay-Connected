@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from "react";
+import { API_ROUTES } from "@/app/utils/apiClient";
 
 interface AddAnswerFormProps {
   questionId: string;
@@ -13,25 +14,27 @@ const AddAnswerForm: React.FC<AddAnswerFormProps> = ({ questionId, accessToken }
     event.preventDefault();
 
     try {
-      const res = await fetch(`https://nunu29.pythonanywhere.com/questions/${questionId}/answers/`, {
+      const url = `${API_ROUTES.submitAnswer}${questionId}/answers/`;
+
+      const res = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`, 
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
-          body: answer, 
-          status: "pending", 
+          body: answer,
+          status: "pending",
         }),
       });
 
       if (!res.ok) {
-        const errorText = await res.text();  
+        const errorText = await res.text();
         throw new Error(`Failed to submit the answer. Server responded: ${errorText}`);
       }
 
-      setAnswer(""); 
-      alert("Answer submitted successfully!"); 
+      setAnswer("");
+      alert("Answer submitted successfully!");
     } catch (error) {
       console.error("Error submitting answer:", error);
     }

@@ -2,6 +2,7 @@ import React from "react";
 import Questions, { QuestionData } from "../../Components/Question";
 import Link from "next/link";
 import Ratings from "../../Components/Ratings";
+import { API_ROUTES } from "@/app/utils/apiClient";  
 
 interface Props {
   searchParams: { search?: string; tag?: string };
@@ -10,7 +11,7 @@ interface Props {
 const Main = async ({ searchParams }: Props) => {
   const search = searchParams.search || "";
   const tag = searchParams.tag || "";
-  let url = "https://nunu29.pythonanywhere.com/questions/";
+  let url = API_ROUTES.submitAnswer;
   const queryParams: string[] = [];
 
   if (search) queryParams.push(`search=${search}`);
@@ -18,6 +19,7 @@ const Main = async ({ searchParams }: Props) => {
   if (queryParams.length > 0) {
     url += `?${queryParams.join("&")}`;
   }
+
   console.log("Fetching from URL:", url);
 
   let questions: QuestionData[] = [];
@@ -48,7 +50,7 @@ const Main = async ({ searchParams }: Props) => {
           ))
         )}
       </div>
-      <div className="border-2 border-current max-lg:hidden  mt-4 rounded-xl flex flex-col items-center p-4 overflow-auto">
+      <div className="border-2 border-current max-lg:hidden mt-4 rounded-xl flex flex-col items-center p-4 overflow-auto">
         <Ratings />
       </div>
     </main>

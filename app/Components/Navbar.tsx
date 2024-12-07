@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { useState, useEffect } from "react";
 import { PiPlugsConnected } from "react-icons/pi";
 import { CiSearch } from "react-icons/ci";
@@ -6,6 +6,7 @@ import { CiSquarePlus } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
+import { apiFetcher, API_ROUTES } from "@/app/utils/apiClient";
 
 interface Tag {
   name: string;
@@ -21,13 +22,8 @@ const Navbar = () => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await fetch("https://nunu29.pythonanywhere.com/tags/");
-        if (response.ok) {
-          const data: Tag[] = await response.json();
-          setTags(data);
-        } else {
-          console.error("Failed to fetch tags");
-        }
+        const data = await apiFetcher<Tag[]>(API_ROUTES.tags, undefined, { method: "GET" });
+        setTags(data || []);
       } catch (error) {
         console.error("Error fetching tags:", error);
       }

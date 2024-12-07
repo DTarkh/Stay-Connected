@@ -1,6 +1,8 @@
-'use client'
+'use client';
 import { useState } from "react";
-import Link from "next/link"; 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { apiFetcher, API_ROUTES } from "@/app/utils/apiClient";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +12,9 @@ const Register = () => {
     confirm_password: "",
   });
   const [message, setMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,26 +28,35 @@ const Register = () => {
       return;
     }
 
-    try {
-      const response = await fetch("https://nunu29.pythonanywhere.com/users/register/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+    setIsLoading(true);
 
-      if (response.ok) {
-        const data = await response.json();
-        setMessage(`Registration successful! Welcome, ${data.username}`);
-        setFormData({ username: "", email: "", password: "", confirm_password: "" }); 
+    try {
+      const data = await apiFetcher<{ username: string } | null>(
+        API_ROUTES.register,
+        undefined,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (data) {
+        setMessage(`Registration successful! Welcome, ${data.username}!`);
+        setFormData({ username: "", email: "", password: "", confirm_password: "" });
+
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
       } else {
-        const errorData = await response.json();
-        setMessage(`Error: ${errorData.detail || "Registration failed"}`);
+        setMessage("Registration failed. Please try again.");
       }
     } catch (error) {
-      console.error("Registration error:", error); // Log the error
+      console.error("Registration error:", error);
       setMessage("An unexpected error occurred.");
+    } finally {
+      setIsLoading(false);
     }
-    
   };
 
   return (
@@ -117,9 +131,10 @@ const Register = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          className={`w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={isLoading}
         >
-          Register
+          {isLoading ? 'Registering...' : 'Register'}
         </button>
 
         <div className="mt-4 text-center">

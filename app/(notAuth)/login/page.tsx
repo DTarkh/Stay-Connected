@@ -1,18 +1,24 @@
 'use client';
 import { useState } from "react";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation"; 
-import Link from "next/link"; 
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { apiFetcher, API_ROUTES } from "@/app/utils/apiClient";
+
+interface FormData {
+  username: string;
+  password: string;
+}
 
 const Login = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     username: "",
     password: "",
   });
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const router = useRouter(); 
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,33 +28,35 @@ const Login = () => {
     e.preventDefault();
 
     setIsLoading(true);
-    setMessage(null); 
+    setMessage(null);
 
     try {
-      const response = await fetch("https://nunu29.pythonanywhere.com/users/login/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const data = await apiFetcher<{ tokens: { access: string; refresh: string } } | null>(
+        API_ROUTES.login,
+        undefined, 
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
-      if (!response.ok) {
-        setMessage("Invalid credentials. Please try again.");
-        return;
+      if (data) {
+        const { access, refresh } = data.tokens;
+
+        Cookies.set('accessToken', access, { expires: 7, secure: true, sameSite: 'Strict' });
+        Cookies.set('refreshToken', refresh, { expires: 7, secure: true, sameSite: 'Strict' });
+
+        setMessage("Login successful!");
+        router.push('/main');
+      } else {
+        setMessage("Invalid credentials. Please check your username and password.");
       }
-
-      const data = await response.json();
-      const accessToken = data.tokens.access;
-      const refreshToken = data.tokens.refresh;
-
-      Cookies.set('accessToken', accessToken, { expires: 7, secure: true, SameSite: 'Strict' });
-      Cookies.set('refreshToken', refreshToken, { expires: 7, secure: true, SameSite: 'Strict' });
-
-      setMessage("Login successful!");
-
-      router.push('/main');
     } catch (error) {
-      setMessage("Failed to connect to the server.");
       console.error("Error:", error);
+      setMessage("Failed to connect to the server.");
     } finally {
       setIsLoading(false);
     }
@@ -103,12 +111,11 @@ const Login = () => {
         </button>
 
         <div className="mt-4 text-center">
-          <p>Don&apos;t have an account?</p> 
+          <p>Don&apos;t have an account?</p>
           <Link href="/register">
             <button className="text-blue-500 underline">Register here</button>
           </Link>
         </div>
-
       </form>
     </div>
   );
