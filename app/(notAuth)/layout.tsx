@@ -1,6 +1,5 @@
 import React from "react";
 import { cookies } from "next/headers"; 
-import Navbar from "../Components/Navbar";
 import { redirect } from "next/navigation"; 
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {

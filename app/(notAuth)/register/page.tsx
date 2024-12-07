@@ -39,8 +39,10 @@ const Register = () => {
         setMessage(`Error: ${errorData.detail || "Registration failed"}`);
       }
     } catch (error) {
+      console.error("Registration error:", error); // Log the error
       setMessage("An unexpected error occurred.");
     }
+    
   };
 
   return (

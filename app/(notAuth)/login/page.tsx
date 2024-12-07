@@ -103,11 +103,12 @@ const Login = () => {
         </button>
 
         <div className="mt-4 text-center">
-          <p>Don't have an account?</p>
+          <p>Don&apos;t have an account?</p> 
           <Link href="/register">
             <button className="text-blue-500 underline">Register here</button>
           </Link>
         </div>
+
       </form>
     </div>
   );

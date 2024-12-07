@@ -3,25 +3,27 @@ import { useState, useEffect } from "react";
 import { PiPlugsConnected } from "react-icons/pi";
 import { CiSearch } from "react-icons/ci";
 import { CiSquarePlus } from "react-icons/ci";
-import AddQuestion from "./AddQuestion";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import LogoutButton from "./LogoutButton"; 
+import LogoutButton from "./LogoutButton";
+
+interface Tag {
+  name: string;
+}
 
 const Navbar = () => {
   const router = useRouter();
   const [searchInput, setSearchInput] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isAddQuestionMenuOpen, setIsAddQuestionMenuOpen] = useState(false);
-  const [tags, setTags] = useState<any[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
 
   useEffect(() => {
     const fetchTags = async () => {
       try {
         const response = await fetch("https://nunu29.pythonanywhere.com/tags/");
         if (response.ok) {
-          const data = await response.json();
+          const data: Tag[] = await response.json();
           setTags(data);
         } else {
           console.error("Failed to fetch tags");
@@ -40,12 +42,8 @@ const Navbar = () => {
 
   const handleSearch = () => {
     const searchTerm = searchInput.trim();
-    const tagQuery = selectedTag
-      ? `tag=${encodeURIComponent(selectedTag)}`
-      : "";
-    const searchQuery = searchTerm
-      ? `search=${encodeURIComponent(searchTerm)}`
-      : "";
+    const tagQuery = selectedTag ? `tag=${encodeURIComponent(selectedTag)}` : "";
+    const searchQuery = searchTerm ? `search=${encodeURIComponent(searchTerm)}` : "";
 
     let finalUrl = "/main";
     if (searchQuery || tagQuery) {
@@ -57,7 +55,6 @@ const Navbar = () => {
     }
 
     console.log("Navigating to:", finalUrl);
-
     router.push(finalUrl);
   };
 
@@ -110,7 +107,7 @@ const Navbar = () => {
             {tags.length === 0 ? (
               <li className="px-4 py-2 text-center">Loading tags...</li>
             ) : (
-              tags.map((tag: any) => (
+              tags.map((tag) => (
                 <li
                   key={tag.name}
                   className="px-4 py-2 cursor-pointer hover:bg-cyan-400 hover:text-white transition-colors duration-200 rounded-lg mb-2 border-b border-gray-300 last:border-none"
@@ -141,7 +138,7 @@ const Navbar = () => {
       </Link>
 
       {/* Logout Button */}
-      <LogoutButton /> 
+      <LogoutButton />
     </nav>
   );
 };
