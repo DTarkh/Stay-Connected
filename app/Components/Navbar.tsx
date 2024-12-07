@@ -6,6 +6,7 @@ import { CiSquarePlus } from "react-icons/ci";
 import AddQuestion from "./AddQuestion";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import LogoutButton from "./LogoutButton"; 
 
 const Navbar = () => {
   const router = useRouter();
@@ -66,7 +67,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex bg-cyan-500 px-10 py-3 items-center gap-5  max-sm:flex-col">
+    <nav className="flex bg-cyan-500 px-10 py-3 items-center gap-5 max-sm:flex-col">
       {/* Home Button */}
       <button
         className="bg-transparent border-none cursor-pointer"
@@ -85,7 +86,7 @@ const Navbar = () => {
           placeholder="Type here"
           value={searchInput}
           onChange={handleChange}
-          className="input input-bordered w-full h-10 pl-10  border-[#14213D] rounded-lg text-black"
+          className="input input-bordered w-full h-10 pl-10 border-[#14213D] rounded-lg text-black"
         />
       </div>
 
@@ -121,9 +122,9 @@ const Navbar = () => {
             )}
           </ul>
         )}
+      </div>
 
-
-
+      {/* Search Button */}
       <div className="relative">
         <button
           type="submit"
@@ -139,9 +140,8 @@ const Navbar = () => {
         <CiSquarePlus className="text-4xl cursor-pointer" />
       </Link>
 
-      </div>
-
-      {/* Search Button */}
+      {/* Logout Button */}
+      <LogoutButton /> 
     </nav>
   );
 };
