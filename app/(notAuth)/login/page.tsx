@@ -46,8 +46,8 @@ const Login = () => {
       if (data) {
         const { access, refresh } = data.tokens;
 
-        Cookies.set('accessToken', access, { expires: 7, secure: true, sameSite: 'Strict' });
-        Cookies.set('refreshToken', refresh, { expires: 7, secure: true, sameSite: 'Strict' });
+        Cookies.set('accessToken', access, { expires: 7,  sameSite: 'Strict' });
+        Cookies.set('refreshToken', refresh, { expires: 7, sameSite: 'Strict' });
 
         setMessage("Login successful!");
         router.push('/main');
