@@ -19,7 +19,10 @@ const Login = () => {
     username: "",
     password: "",
   });
-  const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<{ message: string; color: string }>({
+    message: "",
+    color: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -33,7 +36,10 @@ const Login = () => {
     e.preventDefault();
 
     setIsLoading(true);
-    setMessage(null);
+    setMessage({
+      message: "",
+      color: "",
+    });
 
     try {
       const data = await apiFetcher<{
@@ -47,6 +53,7 @@ const Login = () => {
       });
 
       if (data) {
+        console.log(data.tokens);
         const { access, refresh } = data.tokens;
 
         Cookies.set("accessToken", access, { expires: 7, sameSite: "Strict" });
@@ -55,16 +62,24 @@ const Login = () => {
           sameSite: "Strict",
         });
 
-        setMessage("Login successful!");
+        setMessage({
+          message: "Login successful!",
+          color: "green",
+        });
         router.push("/main");
       } else {
-        setMessage(
-          "Invalid credentials. Please check your username and password."
-        );
+        setMessage({
+          message:
+            "Invalid credentials. Please check your username and password.",
+          color: "red",
+        });
       }
     } catch (error) {
       console.error("Error:", error);
-      setMessage("Failed to connect to the server.");
+      setMessage({
+        message: "Failed to connect to the server.",
+        color: "red",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -77,7 +92,11 @@ const Login = () => {
         onSubmit={handleSubmit}
       >
         <h2 className="text-2xl font-bold text-black mb-6">Login</h2>
-        {message && <p className="mb-4 text-center text-red-500">{message}</p>}
+        {message.message && (
+          <p className={`mb-4 text-center text-${message.color}-500`}>
+            {message.message}
+          </p>
+        )}
         <div className="mb-4">
           <label htmlFor="username" className="block text-gray-500 mb-2">
             Username or Email
@@ -106,7 +125,7 @@ const Login = () => {
               Password
             </label>
             <Link
-              href="/forgotpassword"
+              href="/reset"
               className="text-blue-500 text-sm cursor-pointer hover:underline"
             >
               Forgot Password?

@@ -16,7 +16,10 @@ const Register = () => {
     password: "",
     confirm_password: "",
   });
-  const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<{ message: string; color: string }>({
+    message: "",
+    color: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -30,7 +33,10 @@ const Register = () => {
     e.preventDefault();
 
     if (formData.password !== formData.confirm_password) {
-      setMessage("Passwords do not match!");
+      setMessage({
+        message: "Passwords do not match",
+        color: "red",
+      });
       return;
     }
 
@@ -48,7 +54,10 @@ const Register = () => {
       );
 
       if (data) {
-        setMessage(`Registration successful! Welcome, ${data.username}!`);
+        setMessage({
+          message: `Registration successful! Welcome, ${data.username}!`,
+          color: "green",
+        });
         setFormData({
           username: "",
           email: "",
@@ -60,11 +69,17 @@ const Register = () => {
           router.push("/login");
         }, 800);
       } else {
-        setMessage("Registration failed. Please try again.");
+        setMessage({
+          message: "Registration failed. Please try again.",
+          color: "red",
+        });
       }
     } catch (error) {
       console.error("Registration error:", error);
-      setMessage("An unexpected error occurred.");
+      setMessage({
+        message: "An unexpected error occurred.",
+        color: "red",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -78,7 +93,11 @@ const Register = () => {
       >
         <h2 className="text-2xl font-bold text-black mb-6">Sign Up</h2>
 
-        {message && <p className="mb-4 text-center text-red-500">{message}</p>}
+        {message.message && (
+          <p className={`mb-4 text-center text-${message.color}-500`}>
+            {message.message}
+          </p>
+        )}
 
         <div className="mb-4">
           <label htmlFor="username" className="block text-gray-500 mb-2">
