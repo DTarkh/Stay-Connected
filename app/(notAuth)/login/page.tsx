@@ -8,6 +8,7 @@ const Login = () => {
     password: "",
   });
   const [message, setMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,6 +17,9 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setIsLoading(true);
+    setMessage(null); 
+
     try {
       const response = await fetch("https://nunu29.pythonanywhere.com/users/login/", {
         method: "POST",
@@ -23,22 +27,24 @@ const Login = () => {
         body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        const data = await response.json();
-
-        const accessToken = data.tokens.access;
-        const refreshToken = data.tokens.refresh;
-
-        Cookies.set('accessToken', accessToken, { expires: 7, secure: true, SameSite: 'Strict' });
-        Cookies.set('refreshToken', refreshToken, { expires: 7, secure: true, SameSite: 'Strict' });
-
-        setMessage("Login successful!");
-      } else {
+      if (!response.ok) {
         setMessage("Invalid credentials. Please try again.");
+        return;
       }
+
+      const data = await response.json();
+      const accessToken = data.tokens.access;
+      const refreshToken = data.tokens.refresh;
+
+      Cookies.set('accessToken', accessToken, { expires: 7, secure: true, SameSite: 'Strict' });
+      Cookies.set('refreshToken', refreshToken, { expires: 7, secure: true, SameSite: 'Strict' });
+
+      setMessage("Login successful!");
     } catch (error) {
       setMessage("Failed to connect to the server.");
       console.error("Error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -84,9 +90,10 @@ const Login = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          className={`w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={isLoading}
         >
-          Login
+          {isLoading ? 'Logging in...' : 'Login'}
         </button>
       </form>
     </div>

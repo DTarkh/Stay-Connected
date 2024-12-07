@@ -30,7 +30,6 @@ const QuestionDetailPage = async ({ params }: Props) => {
 
   const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken")?.value || ""; 
-  console.log("Access Token from Cookies:", accessToken);
 
   let question: Question | null = null;
   let error: string | null = null;
