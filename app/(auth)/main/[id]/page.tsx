@@ -1,6 +1,6 @@
 import React from "react";
 import { GetServerSideProps } from "next";
-
+import { cookies } from "next/headers"; 
 import { fetchQuestion } from "@/app/Components/forDetailed/fetchQuestion";
 import ErrorPage from "@/app/Components/forDetailed/ErrorPage";
 import QuestionDetails from "@/app/Components/forDetailed/QuestionDetails";
@@ -16,17 +16,20 @@ interface Question {
   like_count: number;
   dislike_count: number;
   created_at: string;
-  answers: any[];  
-  number_of_answers: number;  
+  answers: any[];
+  number_of_answers: number;
 }
 
 interface Props {
   params: { id: string };
+  accessToken: string; 
 }
 
 const QuestionDetailPage = async ({ params }: Props) => {
   const { id } = params;
-  const accessToken = " { }"; // Replace with your access token
+
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("accessToken")?.value || ""; 
 
   let question: Question | null = null;
   let error: string | null = null;
@@ -56,7 +59,7 @@ const QuestionDetailPage = async ({ params }: Props) => {
       <AnswerList answers={question.answers} number_of_answers={question.number_of_answers} /> 
       <AddAnswerForm
         questionId={question.id.toString()}
-        accessToken={accessToken}
+        accessToken={accessToken} 
       />
     </main>
   );

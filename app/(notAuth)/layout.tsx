@@ -7,13 +7,12 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const cookieStore = cookies();
   const refreshToken = cookieStore.get("refreshToken"); 
 
-  if (!refreshToken) {
-    redirect("/login");
+  if (refreshToken) {
+    redirect("/main");
   }
 
   return (
     <div className="bg-blue-400 min-h-[100vh]">
-      <Navbar />
       {children}
     </div>
   );
