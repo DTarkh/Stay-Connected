@@ -46,9 +46,17 @@ const Page = () => {
             </div>
           </div>
           <div className="mb-6">
-            <label htmlFor="password" className="block text-gray-500 mb-2">
-              Password
-            </label>
+            <div className="flex justify-between">
+              <label htmlFor="password" className="block text-gray-500 mb-2">
+                Password
+              </label>
+              <Link
+                href="/forgotpass"
+                className="text-gray-500 text-sm cursor-pointer"
+              >
+                Forgot Password?
+              </Link>
+            </div>
             <div className="relative flex items-center">
               <CiLock
                 size="25"
@@ -90,7 +98,7 @@ const Page = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-purple-600 text-white font-bold py-2 px-4 rounded hover:bg-purple-00 hover:text-gray-100 transition-colors"
+            className="w-full bg-purple-600 text-white font-bold py-2 px-4 rounded hover:bg-purple-900 hover:text-gray-100 transition-colors"
           >
             Login
           </button>

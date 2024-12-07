@@ -90,7 +90,7 @@ const Page = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-purple-600 text-white font-bold py-2 px-4 rounded hover:bg-purple-00 hover:text-gray-100 transition-colors"
+            className="w-full bg-purple-600 text-white font-bold py-2 px-4 rounded hover:bg-purple-900 hover:text-gray-100 transition-colors"
           >
             Login
           </button>
