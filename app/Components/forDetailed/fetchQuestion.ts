@@ -1,19 +1,10 @@
+import { apiFetcher, API_ROUTES } from "@/app/utils/apiClient";
 export async function fetchQuestion(id: string) {
-    const res = await fetch(`https://nunu29.pythonanywhere.com/questions/${id}/`, {
+  const data = await apiFetcher(API_ROUTES.question, id, {
       headers: {
-        'Cache-Control': 'no-cache', 
+          'Cache-Control': 'no-cache',
       },
-    });
-  
-    if (res.status === 404) {
-      return null;
-    }
-  
-    if (!res.ok) {
-      throw new Error("Failed to fetch data");
-    }
-  
-    const data = await res.json();
-    return data;
-  }
-  
+  });
+
+  return data;
+}

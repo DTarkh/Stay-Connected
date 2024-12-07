@@ -1,7 +1,7 @@
-'use client'
+'use client';
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import { apiFetcher, API_ROUTES } from "@/app/utils/apiClient";
 
 const Register = () => {
@@ -12,9 +12,9 @@ const Register = () => {
     confirm_password: "",
   });
   const [message, setMessage] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
 
-  const router = useRouter(); 
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,11 +28,12 @@ const Register = () => {
       return;
     }
 
-    setIsLoading(true); 
+    setIsLoading(true);
 
     try {
-      const data = await apiFetcher<{ username: string }>(
-        'register',  
+      const data = await apiFetcher<{ username: string } | null>(
+        API_ROUTES.register,
+        undefined,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -40,17 +41,21 @@ const Register = () => {
         }
       );
 
-      setMessage(`Registration successful! Welcome!`);
-      setFormData({ username: "", email: "", password: "", confirm_password: "" }); 
+      if (data) {
+        setMessage(`Registration successful! Welcome, ${data.username}!`);
+        setFormData({ username: "", email: "", password: "", confirm_password: "" });
 
-      setTimeout(() => {
-        router.push("/login"); 
-      }, 2000);
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
+      } else {
+        setMessage("Registration failed. Please try again.");
+      }
     } catch (error) {
       console.error("Registration error:", error);
       setMessage("An unexpected error occurred.");
     } finally {
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
 

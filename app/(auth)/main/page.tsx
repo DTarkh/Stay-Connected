@@ -2,7 +2,7 @@ import React from "react";
 import Questions, { QuestionData } from "../../Components/Question";
 import Link from "next/link";
 import Ratings from "../../Components/Ratings";
-import { apiFetcher, API_ROUTES } from "@/app/utils/apiClient";  
+import { API_ROUTES } from "@/app/utils/apiClient";  
 
 interface Props {
   searchParams: { search?: string; tag?: string };

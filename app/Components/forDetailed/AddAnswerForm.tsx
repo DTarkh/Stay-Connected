@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from "react";
-import { apiFetcher, API_ROUTES } from "@/app/utils/apiClient";
+import { API_ROUTES } from "@/app/utils/apiClient";
 
 interface AddAnswerFormProps {
   questionId: string;

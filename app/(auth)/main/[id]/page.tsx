@@ -1,5 +1,5 @@
 import React from "react";
-import { cookies } from "next/headers"; 
+import { cookies } from "next/headers";
 import { fetchQuestion } from "@/app/Components/forDetailed/fetchQuestion";
 import ErrorPage from "@/app/Components/forDetailed/ErrorPage";
 import QuestionDetails from "@/app/Components/forDetailed/QuestionDetails";
@@ -42,7 +42,7 @@ const QuestionDetailPage = async ({ params }: Props) => {
   let error: string | null = null;
 
   try {
-    question = await fetchQuestion(id);
+    question = await fetchQuestion(id.toString()) as Question | null;
 
     if (!question) {
       error = `Question with ID ${id} not found.`;
@@ -64,7 +64,10 @@ const QuestionDetailPage = async ({ params }: Props) => {
     <main className="flex flex-col min-h-screen justify-center gap-5 bg-blue-400 p-4 mx-12">
       <QuestionDetails question={question} />
       <AnswerList answers={question.answers} number_of_answers={question.number_of_answers} />
-      <AddAnswerForm questionId={question.id.toString()} accessToken={accessToken} />
+      <AddAnswerForm
+        questionId={question.id.toString()}
+        accessToken={accessToken}
+      />
     </main>
   );
 };

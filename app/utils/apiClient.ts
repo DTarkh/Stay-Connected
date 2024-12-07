@@ -9,28 +9,34 @@ const API_ROUTES = {
     login: `${BASE_URL}/users/login/`,
     submitAnswer: `${BASE_URL}/questions/`,
     tags: `${BASE_URL}/tags/`,
+    question: (id: string) => `${BASE_URL}/questions/${id}/`,
     // Add other endpoints as needed
 };
 
 /**
  * Fetcher function to make API requests.
  * @param endpoint - API endpoint from API_ROUTES.
+ * @param id - Dynamic parameter for the endpoint, if needed.
  * @param options - Fetch options (method, headers, body, etc.).
  * @returns The parsed response body.
  */
 async function apiFetcher<T>(
-    endpoint: keyof typeof API_ROUTES,
+    endpoint: string | ((id: string) => string),
+    id?: string,
     options?: RequestInit
-): Promise<T> {
-    const url = API_ROUTES[endpoint];
+): Promise<T | null> {
+    const url = typeof endpoint === 'function' ? endpoint(id!) : endpoint;
 
     const response = await fetch(url, options);
 
     if (!response.ok) {
+        if (response.status === 404) {
+            return null;
+        }
         throw new Error(`Error: ${response.statusText}`);
     }
 
-    return response.json();
+    return response.json() as Promise<T>;
 }
 
 export { API_ROUTES, apiFetcher };
