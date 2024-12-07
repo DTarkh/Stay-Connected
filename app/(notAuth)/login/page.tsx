@@ -3,6 +3,7 @@ import { useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation"; 
 import Link from "next/link"; 
+import { apiFetcher,  API_ROUTES } from "@/app/utils/apiClient";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -25,23 +26,21 @@ const Login = () => {
     setMessage(null); 
 
     try {
-      const response = await fetch("https://nunu29.pythonanywhere.com/users/login/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const data = await apiFetcher<{ tokens: { access: string; refresh: string } }>(
+        'login',  
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
-      if (!response.ok) {
-        setMessage("Invalid credentials. Please try again.");
-        return;
-      }
+      const { access, refresh } = data.tokens;
 
-      const data = await response.json();
-      const accessToken = data.tokens.access;
-      const refreshToken = data.tokens.refresh;
-
-      Cookies.set('accessToken', accessToken, { expires: 7, secure: true, SameSite: 'Strict' });
-      Cookies.set('refreshToken', refreshToken, { expires: 7, secure: true, SameSite: 'Strict' });
+      Cookies.set('accessToken', access, { expires: 7, secure: true, SameSite: 'Strict' });
+      Cookies.set('refreshToken', refresh, { expires: 7, secure: true, SameSite: 'Strict' });
 
       setMessage("Login successful!");
 
