@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Documentation for Using URLs and Environment Variables in Next.js
+1. Setting Up Environment Variables
+To manage API base URLs and configurations, define environment variables in your Next.js project.
 
-## Getting Started
+1.1. Create .env.local
+Create a .env.local file in the root of your project to store environment variables, including the base URL for your API.
 
-First, run the development server:
+Example:
+    NEXT_PUBLIC_API_BASE_URL = https://example.site.com
+    NEXT_PUBLIC_API_BASE_URL: The NEXT_PUBLIC_ prefix exposes the variable to client-side JavaScript.
+Note: Add .env.local to .gitignore to prevent it from being committed to version control.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1.2. Environment-Specific Files
+You can create separate files for different environments:
+.env.development: For local development.
+.env.production: For production.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Accessing Environment Variables in Code
+You can access environment variables using process.env in your code.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Example:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+            const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-## Learn More
+            if (!BASE_URL) {
+            throw new Error("Missing NEXT_PUBLIC_API_BASE_URL");
+            }
+3. Using URLs in API Requests
+After setting up environment variables, use them to make dynamic API requests.
 
-To learn more about Next.js, take a look at the following resources:
+3.1. API Request Example
+Use the base URL and endpoints in your login and registration code.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Login Example:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+        import { apiFetcher, API_ROUTES } from "@/app/apiClient";
 
-## Deploy on Vercel
+        const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const data = await apiFetcher('login', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+        });
+        // Handle success
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+        };
+3.2. apiClient.ts Example
+This file constructs API endpoints dynamically using the environment variable.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+        const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+        if (!BASE_URL) {
+        throw new Error("Missing NEXT_PUBLIC_API_BASE_URL");
+        }
+
+        const API_ROUTES = {
+        register: `${BASE_URL}/users/register/`,
+        login: `${BASE_URL}/users/login/`,
+        };
