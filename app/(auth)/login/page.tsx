@@ -1,5 +1,6 @@
 'use client'
 import { useState } from "react";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -24,14 +25,20 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setMessage(`Login successful! Response: ${JSON.stringify(data)}`);
-      } else if (response.status === 401) {
-        setMessage("Invalid credentials. Please try again.");
+
+        const accessToken = data.tokens.access;
+        const refreshToken = data.tokens.refresh;
+
+        Cookies.set('accessToken', accessToken, { expires: 7, secure: true, SameSite: 'Strict' });
+        Cookies.set('refreshToken', refreshToken, { expires: 7, secure: true, SameSite: 'Strict' });
+
+        setMessage("Login successful!");
       } else {
-        setMessage("An unexpected error occurred.");
+        setMessage("Invalid credentials. Please try again.");
       }
     } catch (error) {
       setMessage("Failed to connect to the server.");
+      console.error("Error:", error);
     }
   };
 
