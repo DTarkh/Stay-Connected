@@ -56,15 +56,21 @@ const Login = () => {
         console.log(data.tokens);
         const { access, refresh } = data.tokens;
 
-        Cookies.set("accessToken", access, { expires: 7, sameSite: "Strict" });
-        Cookies.set("refreshToken", refresh, { expires: 7, sameSite: "Strict" });
-        Cookies.set("username", formData.username, { expires: 7, sameSite: "Strict" }); 
+              //  59 minutes
+            Cookies.set("accessToken", access, { expires: 59 / 1440, sameSite: "Strict" });
+
+            // 23.5 hours
+            Cookies.set("refreshToken", refresh, { expires: 23.5 / 24, sameSite: "Strict" });
+
+            // 23.5 hours
+            Cookies.set("username", formData.username, { expires: 23.5 / 24, sameSite: "Strict" });
 
         setMessage({
           message: "Login successful!",
           color: "green",
         });
-        router.push("/main");
+        router.refresh(); 
+
       } else {
         setMessage({
           message: "Invalid credentials. Please check your username and password.",

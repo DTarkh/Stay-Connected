@@ -11,8 +11,9 @@ const API_ROUTES = {
   submitAnswer: `${BASE_URL}/questions/`,
   tags: `${BASE_URL}/tags/`,
   question: (id: string) => `${BASE_URL}/questions/${id}/`,
-  profile: `${BASE_URL}/users/profile`, 
-    // Add other endpoints as needed
+  profile: `${BASE_URL}/users/profile`,
+  tokenRefresh: `${BASE_URL}/users/token/refresh/`,
+  // Add other endpoints as needed
 };
 
 /**

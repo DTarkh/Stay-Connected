@@ -1,12 +1,13 @@
-"use client";
+'use client';
 import { useState, useEffect } from "react";
-import { PiPlugsConnected } from "react-icons/pi";
 import { CiSearch } from "react-icons/ci";
 import { CiSquarePlus } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import LogoutButton from "./LogoutButton";
+import Image from 'next/image'; 
 import { apiFetcher, API_ROUTES } from "@/app/utils/apiClient";
+import { usePathname } from "next/navigation";
+import { CgProfile } from "react-icons/cg";
 
 interface Tag {
   name: string;
@@ -18,6 +19,8 @@ const Navbar = () => {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [tags, setTags] = useState<Tag[]>([]);
+
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -47,7 +50,7 @@ const Navbar = () => {
       ? `search=${encodeURIComponent(searchTerm)}`
       : "";
 
-    let finalUrl = "/main";
+    let finalUrl = "/home";
     if (searchQuery || tagQuery) {
       finalUrl += "?";
       const queries = [];
@@ -66,82 +69,97 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex bg-cyan-500 px-10 py-3 items-center gap-5 max-sm:flex-col">
+    <nav className="flex justify-between items-center bg-gradient-to-r from-cyan-600 via-blue-500 to-indigo-500 px-8 py-4 shadow-md max-sm:flex-col gap-5">
       {/* Home Button */}
-      <button
-        className="bg-transparent border-none cursor-pointer"
-        onClick={() => router.push("/main")}
+      <div
+        className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity duration-300"
+        onClick={() => router.push("/home")}
       >
-        <PiPlugsConnected className="text-4xl" />
-      </button>
+        <Image src="/../icon.svg" alt="Home Icon" width={30} height={30} />
+        <span className="text-xl font-bold text-white tracking-wide">
+          StayConnected
+        </span>
+      </div>
 
       {/* Search Field */}
-      <div className="relative w-full ml-5 flex items-center gap-3">
-        <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
-          <CiSearch size={20} className="max-lg:hidden" />
-        </span>
-        <input
-          type="text"
-          placeholder="Type here"
-          value={searchInput}
-          onChange={handleChange}
-          className="input input-bordered w-full h-10 pl-10 border-[#14213D] rounded-lg text-black"
-        />
-      </div>
+      {pathname === "/home" && (
+        <>
+          <div className="relative w-full max-w-md ml-10 flex items-center">
+            <span className="absolute left-3 text-gray-400">
+              <CiSearch size={22} />
+            </span>
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchInput}
+              onChange={handleChange}
+              className="w-full h-10 pl-10 pr-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-800"
+            />
+          </div>
 
-      {/* Choose Tag Button */}
-      <div
-        className="relative flex items-center gap-4"
-        onMouseEnter={() => setIsMenuOpen(true)}
-        onMouseLeave={() => setIsMenuOpen(false)}
-      >
-        <button className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded hover:bg-blue-600 transition duration-200 ease-in-out whitespace-nowrap">
-          {selectedTag ? selectedTag : "Choose Tag"}
-        </button>
-        {isMenuOpen && (
-          <ul className="absolute mt-48 bg-white shadow-lg rounded p-2 z-10 text-black max-h-60 overflow-auto w-48">
-            <li
-              key="no-tags"
-              className="px-4 py-2 cursor-pointer hover:bg-cyan-400 hover:text-white transition-colors duration-200 rounded-lg mb-2 border-b border-gray-300 last:border-none text-center"
-              onClick={() => handleTagClick("No tag")}
-            >
-              No tag
-            </li>
-            {tags.length === 0 ? (
-              <li className="px-4 py-2 text-center">Loading tags...</li>
-            ) : (
-              tags.map((tag) => (
+          {/* Choose Tag Button */}
+
+          <div
+            className="relative"
+            onMouseEnter={() => setIsMenuOpen(true)}
+            onMouseLeave={() => setIsMenuOpen(false)}
+          >
+            <button className="px-4 py-2 bg-white text-gray-800 font-semibold rounded-lg shadow-md hover:bg-blue-600 hover:text-white transition-colors duration-300">
+              {selectedTag || "Choose Tag"}
+            </button>
+            {isMenuOpen && (
+              <ul className="absolute pt-2 bg-white shadow-lg rounded-lg py-2 z-10 text-gray-800 max-h-60 overflow-auto w-48">
                 <li
-                  key={tag.name}
-                  className="px-4 py-2 cursor-pointer hover:bg-cyan-400 hover:text-white transition-colors duration-200 rounded-lg mb-2 border-b border-gray-300 last:border-none"
-                  onClick={() => handleTagClick(tag.name)}
+                  key="no-tags"
+                  className="px-4 py-2 cursor-pointer hover:bg-blue-500 hover:text-white transition-colors duration-300"
+                  onClick={() => handleTagClick("No tag")}
                 >
-                  {tag.name}
+                  No tag
                 </li>
-              ))
+                {tags.length === 0 ? (
+                  <li className="px-4 py-2 text-center">Loading tags...</li>
+                ) : (
+                  tags.map((tag) => (
+                    <li
+                      key={tag.name}
+                      className="px-4 py-2 cursor-pointer hover:bg-blue-500 hover:text-white transition-colors duration-300"
+                      onClick={() => handleTagClick(tag.name)}
+                    >
+                      {tag.name}
+                    </li>
+                  ))
+                )}
+              </ul>
             )}
-          </ul>
-        )}
-      </div>
+          </div>
+          {/* Search Button */}
+          <button
+            type="submit"
+            onClick={handleSearch}
+            className="flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-indigo-500 transition-colors duration-300"
+          >
+            <CiSearch size={22} />
+            <span className="ml-2">Search</span>
+          </button>
 
-      {/* Search Button */}
-      <div className="relative">
-        <button
-          type="submit"
-          onClick={handleSearch}
-          className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded hover:bg-blue-600 flex items-center justify-center"
-        >
-          <CiSearch size={20} />
-        </button>
-      </div>
-
-      {/* Add Question Button */}
-      <Link href="/add">
-        <CiSquarePlus className="text-4xl cursor-pointer" />
-      </Link>
+          {/* Add Question Button */}
+          <Link href="/add">
+            <CiSquarePlus
+              size={30}
+              className="text-white cursor-pointer hover:scale-110 transition-transform duration-300"
+            />
+          </Link>
+        </>
+      )}
 
       {/* Logout Button */}
-      <LogoutButton />
+      {/* <LogoutButton /> */}
+      <Link href="/profile">
+        <CgProfile
+          size={30}
+          className="text-white cursor-pointer hover:scale-110 transition-transform duration-300"
+        />
+      </Link>
     </nav>
   );
 };

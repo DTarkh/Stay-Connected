@@ -1,5 +1,7 @@
 import { cookies } from "next/headers";
 import { API_ROUTES, apiFetcher } from "@/app/utils/apiClient";
+import LogoutButton from "@/app/Components/LogoutButton";
+import Image from "next/image";
 
 export default async function Profile() {
   const cookieStore = cookies();
@@ -10,9 +12,7 @@ export default async function Profile() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-red-600">
-            Missing Access Token or Username
-          </h2>
+          <h2 className="text-2xl font-bold text-red-600">Missing Access Token or Username</h2>
           <p className="text-gray-500 mt-2">Please log in to access your profile.</p>
         </div>
       </div>
@@ -42,14 +42,19 @@ export default async function Profile() {
       throw new Error("Failed to fetch profile data.");
     }
 
+    const defaultProfileImage = "https://img.freepik.com/premium-vector/user-icon-avatar-user-profile-person-icon-gender-neutral-silhouette-profile-picture-suitable_697711-1132.jpg?text=No+Image";
+
     return (
       <div className="min-h-screen bg-gray-100 py-12">
-        <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-xl">
+        <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-xl space-y-8">
+          {/* Profile Header */}
           <div className="flex items-center space-x-6">
-            <img
-              src={profileData.profile_image}
+            <Image
+              src={profileData.profile_image || defaultProfileImage}
               alt={`${profileData.username}'s Profile`}
-              className="w-24 h-24 rounded-full border-4 border-indigo-600"
+              width={128} 
+              height={128}
+              className="rounded-full border-4 border-indigo-600 shadow-md"
             />
             <div>
               <h1 className="text-3xl font-semibold text-black">{profileData.full_name}</h1>
@@ -58,33 +63,43 @@ export default async function Profile() {
             </div>
           </div>
 
-          <div className="mt-8">
-            <h2 className="text-2xl font-bold text-black">Achievements</h2>
-            <ul className="mt-4 space-y-3">
-              {profileData.achievements?.map((achievement, index) => (
-                <li key={index} className="flex justify-between items-center text-gray-800">
-                  <span className="font-semibold">{achievement.tier}</span>
-                  <span className="text-sm text-gray-600">
-                    {new Date(achievement.achieved_at).toLocaleDateString()}
-                  </span>
-                </li>
-              ))}
-            </ul>
+          {/* Achievements Section */}
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold text-black">Achievements</h2>
+            <div className="bg-white border rounded-lg p-6 shadow-md">
+              <ul className="space-y-3">
+                {profileData.achievements?.map((achievement, index) => (
+                  <li key={index} className="flex justify-between items-center text-gray-800">
+                    <span className="font-semibold">{achievement.tier}</span>
+                    <span className="text-sm text-gray-600">
+                      {new Date(achievement.achieved_at).toLocaleDateString()}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          <div className="mt-8">
-            <h2 className="text-2xl font-bold text-black">Score</h2>
-            <p className="text-3xl font-semibold text-gray-800">{profileData.score}</p>
+          {/* Score Section */}
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold text-black">Score</h2>
+            <p className="text-4xl font-semibold text-gray-800">{profileData.score}</p>
           </div>
 
-          <div className="mt-8">
-            <h2 className="text-2xl font-bold text-black">Current Tier</h2>
+          {/* Current Tier Section */}
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold text-black">Current Tier</h2>
             <p className="text-xl text-indigo-600 font-semibold">{profileData.current_tier}</p>
+          </div>
+
+          {/* Logout Button */}
+          <div className="mt-6">
+            <LogoutButton />
           </div>
         </div>
       </div>
     );
-  } catch (error) {
+  } catch {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center">

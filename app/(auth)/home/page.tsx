@@ -2,7 +2,7 @@ import React from "react";
 import Questions, { QuestionData } from "../../Components/Question";
 import Link from "next/link";
 import Ratings from "../../Components/Ratings";
-import { API_ROUTES } from "@/app/utils/apiClient";  
+import { API_ROUTES } from "@/app/utils/apiClient";
 
 interface Props {
   searchParams: { search?: string; tag?: string };
@@ -36,21 +36,27 @@ const Main = async ({ searchParams }: Props) => {
   }
 
   return (
-    <main className="flex w-full justify-center gap-5">
-      <div className="flex flex-col items-center gap-4 mt-4">
+    <main className="flex w-full justify-center gap-8 p-6 bg-gray-50">
+      {/* Questions Section */}
+      <div className="flex flex-col items-center gap-6 mt-6 w-full max-w-3xl">
         {questions.length === 0 ? (
-          <p>No questions available</p>
+          <p className="text-gray-600 text-lg">No questions available</p>
         ) : (
           questions.map((item: QuestionData) => (
-            <div className="w-full" key={item.id}>
-              <Link href={`/main/${item.id}`} passHref>
+            <div
+              className="w-full bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-300"
+              key={item.id}
+            >
+              <Link href={`/home/${item.id}`} passHref>
                 <Questions item={item} />
               </Link>
             </div>
           ))
         )}
       </div>
-      <div className="border-2 border-current max-lg:hidden mt-4 rounded-xl flex flex-col items-center p-4 overflow-auto">
+
+      {/* Ratings Section */}
+      <div className="border border-gray-300 bg-white shadow-lg rounded-lg max-lg:hidden mt-6 p-6 flex flex-col items-center gap-4 overflow-auto max-h-[500px]">
         <Ratings />
       </div>
     </main>
