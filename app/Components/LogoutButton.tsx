@@ -9,8 +9,7 @@ const LogoutButton = () => {
   const handleLogout = () => {
     Cookies.remove("accessToken");
     Cookies.remove("refreshToken");
-
-    router.push("/login");
+    router.refresh(); 
   };
 
   return (

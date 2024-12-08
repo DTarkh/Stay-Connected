@@ -47,7 +47,7 @@ const Main = async ({ searchParams }: Props) => {
               className="w-full bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow duration-300"
               key={item.id}
             >
-              <Link href={`/main/${item.id}`} passHref>
+              <Link href={`/home/${item.id}`} passHref>
                 <Questions item={item} />
               </Link>
             </div>
