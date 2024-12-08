@@ -6,7 +6,7 @@ import { API_ROUTES, apiFetcher } from "@/app/utils/apiClient";
 const AddQuestion = () => {
   const [title, setTitle] = useState(""); 
   const [description, setDescription] = useState(""); 
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]); 
   const [tagsList, setTagsList] = useState<{ name: string }[]>([]); 
   const [successMessage, setSuccessMessage] = useState(""); 
 
@@ -63,7 +63,7 @@ const AddQuestion = () => {
       setSelectedTags([]);
 
       setTimeout(() => {
-        window.location.href = "/main";
+        window.location.href = "/home";
       }, 500); 
     } catch (error) {
       console.error("Error submitting the question:", error);
@@ -73,29 +73,8 @@ const AddQuestion = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-3xl h-[80vh] mx-auto bg-white p-6 shadow-md rounded-md flex flex-col justify-center gap-6 relative mt-10"
+      className="w-full max-w-3xl mx-auto bg-white p-6 shadow-md rounded-md flex flex-col gap-6 mt-10"
     >
-      <button
-        type="button"
-        className="btn btn-square absolute top-3 right-3"
-        onClick={() => window.location.href = "/main"}  
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
-
       {successMessage && (
         <div className="text-green-600 text-center mb-4">
           {successMessage}
@@ -126,7 +105,7 @@ const AddQuestion = () => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Enter the question description"
-          className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
+          className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-black resize-none min-h-[120px]"
           required
         />
       </div>
