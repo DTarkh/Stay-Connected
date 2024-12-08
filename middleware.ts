@@ -32,7 +32,11 @@ export async function middleware(request: NextRequest) {
 
       if (response.ok && data.access) {
         const nextResponse = NextResponse.next();
-        nextResponse.cookies.set('accessToken', data.access, {  sameSite: 'strict' });
+        // Set the accessToken to expire in 59 minutes
+        nextResponse.cookies.set('accessToken', data.access, { 
+          maxAge: 3540, 
+          sameSite: 'strict' 
+        });
 
         return nextResponse;
       }
