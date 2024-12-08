@@ -1,10 +1,10 @@
-"use client";
+'use client';
 import { useState, useEffect } from "react";
 import { CiSearch } from "react-icons/ci";
 import { CiSquarePlus } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-// import LogoutButton from "./LogoutButton";
+import Image from 'next/image'; 
 import { apiFetcher, API_ROUTES } from "@/app/utils/apiClient";
 import { usePathname } from "next/navigation";
 import { CgProfile } from "react-icons/cg";
@@ -50,7 +50,7 @@ const Navbar = () => {
       ? `search=${encodeURIComponent(searchTerm)}`
       : "";
 
-    let finalUrl = "/main";
+    let finalUrl = "/home";
     if (searchQuery || tagQuery) {
       finalUrl += "?";
       const queries = [];
@@ -73,16 +73,16 @@ const Navbar = () => {
       {/* Home Button */}
       <div
         className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity duration-300"
-        onClick={() => router.push("/main")}
+        onClick={() => router.push("/home")}
       >
-        <img src="/../icon.svg" alt="Home Icon" width={30} height={30} />
+        <Image src="/../icon.svg" alt="Home Icon" width={30} height={30} />
         <span className="text-xl font-bold text-white tracking-wide">
           StayConnected
         </span>
       </div>
 
       {/* Search Field */}
-      {pathname === "/main" && (
+      {pathname === "/home" && (
         <>
           <div className="relative w-full max-w-md ml-10 flex items-center">
             <span className="absolute left-3 text-gray-400">
