@@ -42,7 +42,8 @@ const QuestionDetailPage = async ({ params }: Props) => {
   let error: string | null = null;
 
   try {
-    question = (await fetchQuestion(id.toString())) as Question | null;
+
+    question = await fetchQuestion(id.toString()) as Question | null;
 
     if (!question) {
       error = `Question with ID ${id} not found.`;
@@ -61,6 +62,7 @@ const QuestionDetailPage = async ({ params }: Props) => {
   }
 
   return (
+
     <main className="flex justify-center gap-5 bg-white w-full ">
       <div className="flex flex-col w-3/4 items-center pt-10">
         <h3 className="text-3xl font-semibold text-indigo-500">
