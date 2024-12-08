@@ -7,7 +7,6 @@ import { API_ROUTES } from "@/app/utils/apiClient";
 interface Props {
   searchParams: { search?: string; tag?: string };
 }
-
 const Main = async ({ searchParams }: Props) => {
   const search = searchParams.search || "";
   const tag = searchParams.tag || "";
