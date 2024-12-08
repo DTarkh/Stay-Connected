@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { API_ROUTES, apiFetcher } from "@/app/utils/apiClient";
 import LogoutButton from "@/app/Components/LogoutButton";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function Profile() {
   const cookieStore = cookies();
@@ -30,6 +31,10 @@ export default async function Profile() {
       achievements: { tier: string; achieved_at: string }[] | null;
       current_tier: string;
       score: number;
+      questions_count: number;
+      answers_count: number;
+      answers: { question_title: string; answer_text: string; question_id: number }[];
+      questions: { question_title: string; question_id: number }[];
     }>(profileUrl, undefined, {
       method: "GET",
       headers: {
@@ -42,7 +47,8 @@ export default async function Profile() {
       throw new Error("Failed to fetch profile data.");
     }
 
-    const defaultProfileImage = "https://img.freepik.com/premium-vector/user-icon-avatar-user-profile-person-icon-gender-neutral-silhouette-profile-picture-suitable_697711-1132.jpg?text=No+Image";
+    const defaultProfileImage =
+      "https://img.freepik.com/premium-vector/user-icon-avatar-user-profile-person-icon-gender-neutral-silhouette-profile-picture-suitable_697711-1132.jpg?text=No+Image";
 
     return (
       <div className="min-h-screen bg-gray-100 py-12">
@@ -52,7 +58,7 @@ export default async function Profile() {
             <Image
               src={profileData.profile_image || defaultProfileImage}
               alt={`${profileData.username}'s Profile`}
-              width={128} 
+              width={128}
               height={128}
               className="rounded-full border-4 border-indigo-600 shadow-md"
             />
@@ -80,17 +86,58 @@ export default async function Profile() {
             </div>
           </div>
 
-          {/* Score Section */}
+          {/* Score and Tier Section */}
           <div className="space-y-2">
-            <h2 className="text-2xl font-semibold text-black">Score</h2>
-            <p className="text-4xl font-semibold text-gray-800">{profileData.score}</p>
+            <h2 className="text-2xl font-semibold text-black">Stats</h2>
+            <p className="text-lg text-gray-800">Score: {profileData.score}</p>
+            <p className="text-lg text-gray-800">Questions Asked: {profileData.questions_count}</p>
+            <p className="text-lg text-gray-800">Answers Given: {profileData.answers_count}</p>
+            <p className="text-lg text-indigo-600 font-semibold">
+              Current Tier: {profileData.current_tier}
+            </p>
           </div>
 
-          {/* Current Tier Section */}
-          <div className="space-y-2">
-            <h2 className="text-2xl font-semibold text-black">Current Tier</h2>
-            <p className="text-xl text-indigo-600 font-semibold">{profileData.current_tier}</p>
+                {/* Answers Section */}
+          <div className="space-y-6">
+            <h2 className="text-2xl font-semibold text-gray-800 border-b pb-2">Your Answers</h2>
+            <div className="grid gap-6 lg:grid-cols-2">
+              {profileData.answers.map((answer) => (
+                <div
+                  key={answer.question_id}
+                  className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow border border-gray-200"
+                >
+                  <Link
+                    href={`/home/${answer.question_id}`}
+                    className="text-xl font-semibold text-indigo-600 hover:text-indigo-800 transition-colors underline"
+                  >
+                    {answer.question_title}
+                  </Link>
+                  <p className="text-gray-700 mt-3 text-sm line-clamp-2">{answer.answer_text}</p>
+                </div>
+              ))}
+            </div>
           </div>
+
+          {/* Questions Section */}
+          <div className="space-y-6">
+            <h2 className="text-2xl font-semibold text-gray-800 border-b pb-2">Your Questions</h2>
+            <div className="grid gap-6 lg:grid-cols-2">
+              {profileData.questions.map((question) => (
+                <div
+                  key={question.question_id}
+                  className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow border border-gray-200"
+                >
+                  <Link
+                    href={`/home/${question.question_id}`}
+                    className="text-lg font-semibold text-indigo-600 hover:text-indigo-800 transition-colors underline"
+                  >
+                    {question.question_title}
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+
 
           {/* Logout Button */}
           <div className="mt-6">
