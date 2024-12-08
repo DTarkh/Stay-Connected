@@ -57,10 +57,8 @@ const Login = () => {
         const { access, refresh } = data.tokens;
 
         Cookies.set("accessToken", access, { expires: 7, sameSite: "Strict" });
-        Cookies.set("refreshToken", refresh, {
-          expires: 7,
-          sameSite: "Strict",
-        });
+        Cookies.set("refreshToken", refresh, { expires: 7, sameSite: "Strict" });
+        Cookies.set("username", formData.username, { expires: 7, sameSite: "Strict" }); 
 
         setMessage({
           message: "Login successful!",
@@ -69,8 +67,7 @@ const Login = () => {
         router.push("/main");
       } else {
         setMessage({
-          message:
-            "Invalid credentials. Please check your username and password.",
+          message: "Invalid credentials. Please check your username and password.",
           color: "red",
         });
       }
