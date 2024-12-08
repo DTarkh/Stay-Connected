@@ -63,7 +63,7 @@ const AddQuestion = () => {
       setSelectedTags([]);
 
       setTimeout(() => {
-        window.location.href = "/main";
+        window.location.href = "/home";
       }, 500); 
     } catch (error) {
       console.error("Error submitting the question:", error);

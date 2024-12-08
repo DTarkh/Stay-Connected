@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { API_ROUTES } from "@/app/utils/apiClient";
 
 interface AddAnswerFormProps {
@@ -12,6 +13,7 @@ const AddAnswerForm: React.FC<AddAnswerFormProps> = ({
   accessToken,
 }) => {
   const [answer, setAnswer] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -39,7 +41,7 @@ const AddAnswerForm: React.FC<AddAnswerFormProps> = ({
       }
 
       setAnswer("");
-      alert("Answer submitted successfully!");
+      router.refresh(); 
     } catch (error) {
       console.error("Error submitting answer:", error);
     }
