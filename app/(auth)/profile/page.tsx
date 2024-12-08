@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
 import { API_ROUTES, apiFetcher } from "@/app/utils/apiClient";
 import LogoutButton from "@/app/Components/LogoutButton";
+import Image from "next/image";
+
 export default async function Profile() {
   const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken")?.value;
@@ -47,10 +49,12 @@ export default async function Profile() {
         <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-xl space-y-8">
           {/* Profile Header */}
           <div className="flex items-center space-x-6">
-            <img
+            <Image
               src={profileData.profile_image || defaultProfileImage}
               alt={`${profileData.username}'s Profile`}
-              className="w-32 h-32 rounded-full object-contain border-4 border-indigo-600 shadow-md"
+              width={128} 
+              height={128}
+              className="rounded-full border-4 border-indigo-600 shadow-md"
             />
             <div>
               <h1 className="text-3xl font-semibold text-black">{profileData.full_name}</h1>
@@ -95,7 +99,7 @@ export default async function Profile() {
         </div>
       </div>
     );
-  } catch (error) {
+  } catch {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center">
