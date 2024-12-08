@@ -30,7 +30,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
 
   return (
     <div className="flex flex-col gap-3">
-      <h3 className="font-semibold text-lg">Select Tags:</h3>
+      <h3 className="font-semibold text-lg text-gray-900">Select Tags:</h3>
       {tagsList.map((tag) => (
         <div key={tag} className="flex items-center gap-2">
           <input
