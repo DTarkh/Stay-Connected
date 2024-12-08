@@ -7,7 +7,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const refreshToken = cookieStore.get("refreshToken"); 
 
   if (refreshToken) {
-    redirect("/main");
+    redirect("/home");
   }
 
   return (
