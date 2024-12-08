@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
 import { apiFetcher, API_ROUTES } from "@/app/utils/apiClient";
+import Image from "next/image";
 
 interface Tag {
   name: string;
@@ -68,15 +69,16 @@ const Navbar = () => {
   return (
     <nav className="flex bg-cyan-500 px-10 py-3 items-center gap-5 max-sm:flex-col">
       {/* Home Button */}
-      <button
-        className="bg-transparent border-none cursor-pointer"
+      <div
+        className="flex items-center gap-2 p-4  text-white rounded-lg cursor-pointer "
         onClick={() => router.push("/main")}
       >
-        <PiPlugsConnected className="text-4xl" />
-      </button>
+        <Image src="../icon.svg" alt="Home Icon" width={50} height={50} />
+        <span className="text-2xl font-semibold">StayConnected</span>
+      </div>
 
       {/* Search Field */}
-      <div className="relative w-full ml-5 flex items-center gap-3">
+      <div className="relative w-full ml-10 flex items-center gap-3">
         <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
           <CiSearch size={20} className="max-lg:hidden" />
         </span>
