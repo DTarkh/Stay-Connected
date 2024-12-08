@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useState, useEffect } from "react";
 import { PiPlugsConnected } from "react-icons/pi";
 import { CiSearch } from "react-icons/ci";
@@ -22,7 +22,9 @@ const Navbar = () => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const data = await apiFetcher<Tag[]>(API_ROUTES.tags, undefined, { method: "GET" });
+        const data = await apiFetcher<Tag[]>(API_ROUTES.tags, undefined, {
+          method: "GET",
+        });
         setTags(data || []);
       } catch (error) {
         console.error("Error fetching tags:", error);
@@ -38,8 +40,12 @@ const Navbar = () => {
 
   const handleSearch = () => {
     const searchTerm = searchInput.trim();
-    const tagQuery = selectedTag ? `tag=${encodeURIComponent(selectedTag)}` : "";
-    const searchQuery = searchTerm ? `search=${encodeURIComponent(searchTerm)}` : "";
+    const tagQuery = selectedTag
+      ? `tag=${encodeURIComponent(selectedTag)}`
+      : "";
+    const searchQuery = searchTerm
+      ? `search=${encodeURIComponent(searchTerm)}`
+      : "";
 
     let finalUrl = "/main";
     if (searchQuery || tagQuery) {
@@ -84,18 +90,19 @@ const Navbar = () => {
       </div>
 
       {/* Choose Tag Button */}
-      <div className="relative flex items-center gap-4">
-        <button
-          onClick={() => setIsMenuOpen((prev) => !prev)}
-          className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded hover:bg-blue-600 whitespace-nowrap"
-        >
+      <div
+        className="relative flex items-center gap-4"
+        onMouseEnter={() => setIsMenuOpen(true)}
+        onMouseLeave={() => setIsMenuOpen(false)}
+      >
+        <button className="px-4 py-2 bg-yellow-500 text-white font-semibold rounded hover:bg-blue-600 transition duration-200 ease-in-out whitespace-nowrap">
           {selectedTag ? selectedTag : "Choose Tag"}
         </button>
         {isMenuOpen && (
-          <ul className="absolute mt-2 bg-white shadow-lg rounded p-2 z-10 text-black max-h-60 overflow-auto">
+          <ul className="absolute mt-48 bg-white shadow-lg rounded p-2 z-10 text-black max-h-60 overflow-auto w-48">
             <li
               key="no-tags"
-              className="px-4 py-2 cursor-pointer hover:bg-cyan-400 hover:text-white transition-colors duration-200 rounded-lg mb-2 border-b border-gray-300 last:border-none"
+              className="px-4 py-2 cursor-pointer hover:bg-cyan-400 hover:text-white transition-colors duration-200 rounded-lg mb-2 border-b border-gray-300 last:border-none text-center"
               onClick={() => handleTagClick("No tag")}
             >
               No tag
