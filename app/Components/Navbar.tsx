@@ -1,13 +1,14 @@
-'use client';
+"use client";
 import { useState, useEffect } from "react";
 import { CiSearch } from "react-icons/ci";
 import { CiSquarePlus } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from 'next/image'; 
+import Image from "next/image";
 import { apiFetcher, API_ROUTES } from "@/app/utils/apiClient";
 import { usePathname } from "next/navigation";
 import { CgProfile } from "react-icons/cg";
+import LogoutButton from "./LogoutButton";
 
 interface Tag {
   name: string;
@@ -153,7 +154,7 @@ const Navbar = () => {
       )}
 
       {/* Logout Button */}
-      {/* <LogoutButton /> */}
+      <LogoutButton />
       <Link href="/profile">
         <CgProfile
           size={30}

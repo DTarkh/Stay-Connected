@@ -24,7 +24,7 @@ const AnswerList = ({
     {answers.length > 0 ? (
       answers.map((answer) => (
         <div key={answer.id} className="border-b-2 p-4">
-          <p>{answer.body}</p>
+          <p className="text-gray-800">{answer.body}</p>
           <div className="flex justify-end items-center gap-4 mt-4 text-sm text-gray-500">
             <div className="flex items-center">
               <FaThumbsUp className="text-blue-600" />
