@@ -1,55 +1,70 @@
-"use client";
-import { useState } from "react";
-import TagComponent from "@/app/Components/TagComponent";
-import { redirect } from "next/navigation";
-
-
+'use client'
+import { useState, useEffect } from "react";
+import Cookies from "js-cookie";  
+import { API_ROUTES, apiFetcher } from "@/app/utils/apiClient"; 
 
 const AddQuestion = () => {
   const [title, setTitle] = useState(""); 
   const [description, setDescription] = useState(""); 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [tagsList, setTagsList] = useState<{ name: string }[]>([]); 
+  const [successMessage, setSuccessMessage] = useState(""); 
+
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const tags = await apiFetcher<{ name: string }[]>(API_ROUTES.tags);
+        setTagsList(tags || []);
+      } catch (error) {
+        console.error("Error fetching tags:", error);
+      }
+    };
+
+    fetchTags();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
- 
+    e.preventDefault();
+
     const payload = {
-      subject: title, 
+      subject: title,
       body: description,
-      tags: selectedTags, 
+      tags: selectedTags,
     };
-  
-  
-    const accessToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMzNDk4MjE0LCJpYXQiOjE3MzM0OTQ2MTQsImp0aSI6IjJmOGEwNzdiNDRmNzQwMjg4ZTIyZTAwYWJhODlhMTI4IiwidXNlcl9pZCI6MTd9.kHX7BlYE7jAm8UemYtnfWwyFlWfKuwHmCXDMCNRRVUs";
-  
+
+    const accessToken = Cookies.get("accessToken");
+
+    if (!accessToken) {
+      console.error("No access token found.");
+      return;
+    }
+
     try {
-      const response = await fetch(
-        "https://nunu29.pythonanywhere.com/questions/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`, 
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-  
+      const response = await fetch(API_ROUTES.submitAnswer, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
       if (!response.ok) {
         throw new Error("Failed to submit the question");
       }
-  
+
       const data = await response.json();
       console.log("Question submitted successfully:", data);
-  
-      // Reset form fields
+
+      setSuccessMessage("Question added successfully!");
+
       setTitle("");
       setDescription("");
       setSelectedTags([]);
-      redirect("/main")
 
-    
+      setTimeout(() => {
+        window.location.href = "/main";
+      }, 500); 
     } catch (error) {
       console.error("Error submitting the question:", error);
     }
@@ -58,12 +73,12 @@ const AddQuestion = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-[700px] h-[80vh] mx-auto bg-white p-6 shadow-md rounded-md flex flex-col justify-center gap-6 relative mt-10"
+      className="w-full max-w-3xl h-[80vh] mx-auto bg-white p-6 shadow-md rounded-md flex flex-col justify-center gap-6 relative mt-10"
     >
       <button
         type="button"
         className="btn btn-square absolute top-3 right-3"
-    
+        onClick={() => window.location.href = "/main"}  
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -80,11 +95,15 @@ const AddQuestion = () => {
           />
         </svg>
       </button>
+
+      {successMessage && (
+        <div className="text-green-600 text-center mb-4">
+          {successMessage}
+        </div>
+      )}
+
       <div className="mb-4">
-        <label
-          htmlFor="title"
-          className="block text-gray-700 font-semibold mb-2"
-        >
+        <label htmlFor="title" className="block text-gray-700 font-semibold mb-2">
           Question Title
         </label>
         <input
@@ -93,15 +112,13 @@ const AddQuestion = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Enter the question title"
-          className="w-full px-4 py-4 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
           required
         />
       </div>
+
       <div className="mb-4">
-        <label
-          htmlFor="description"
-          className="block text-gray-700 font-semibold mb-2"
-        >
+        <label htmlFor="description" className="block text-gray-700 font-semibold mb-2">
           Question Description
         </label>
         <textarea
@@ -109,19 +126,44 @@ const AddQuestion = () => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Enter the question description"
-          className="w-full px-4 py-2 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
           required
         />
       </div>
-      <TagComponent
-        selectedTags={selectedTags}
-        setSelectedTags={setSelectedTags}
-      />
+
+      {/* Tags  */}
+      <div className="mb-4">
+        <label htmlFor="tags" className="block text-gray-700 font-semibold mb-2">
+          Select Tags
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {tagsList.map((tag) => (
+            <label key={tag.name} className="flex items-center">
+              <input
+                type="checkbox"
+                value={tag.name}  
+                checked={selectedTags.includes(tag.name)} 
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setSelectedTags((prevSelectedTags) =>
+                    prevSelectedTags.includes(value)
+                      ? prevSelectedTags.filter((tag) => tag !== value)
+                      : [...prevSelectedTags, value]
+                  );
+                }}
+                className="mr-2"
+              />
+              <span className="text-gray-700">{tag.name}</span> 
+            </label>
+          ))}
+        </div>
+      </div>
+
       <button
         type="submit"
-        className="w-full px-4 py-4 bg-sky-700 text-white font-semibold rounded-2xl hover:bg-cyan-600"
+        className="w-full px-4 py-3 bg-sky-700 text-white font-semibold rounded-lg hover:bg-cyan-600 focus:outline-none"
       >
-        Create
+        Create Question
       </button>
     </form>
   );
