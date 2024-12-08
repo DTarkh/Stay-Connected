@@ -6,13 +6,13 @@ interface TagDetail {
 
 const Tags = ({ tagDetails }: { tagDetails: TagDetail[] }) => (
   <div className="mt-4">
-    <strong>Tags:</strong>
+    <strong className="text-gray-600">Tags:</strong>
     <ul className="flex gap-2 flex-wrap">
       {tagDetails.length > 0 ? (
         tagDetails.map((tag, index) => (
           <li
             key={index}
-            className="bg-gray-300 px-2 py-1 rounded-full text-sm text-blue-600"
+            className="bg-gray-300 px-2 py-1 rounded-full text-sm text-purple-600"
           >
             {tag.name}
           </li>

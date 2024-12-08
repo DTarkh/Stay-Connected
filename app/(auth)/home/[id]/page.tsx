@@ -42,6 +42,7 @@ const QuestionDetailPage = async ({ params }: Props) => {
   let error: string | null = null;
 
   try {
+
     question = await fetchQuestion(id.toString()) as Question | null;
 
     if (!question) {
@@ -61,13 +62,22 @@ const QuestionDetailPage = async ({ params }: Props) => {
   }
 
   return (
-    <main className="flex flex-col min-h-screen justify-center gap-5 bg-blue-400 p-4 mx-12">
-      <QuestionDetails question={question} />
-      <AnswerList answers={question.answers} number_of_answers={question.number_of_answers} />
-      <AddAnswerForm
-        questionId={question.id.toString()}
-        accessToken={accessToken}
-      />
+
+    <main className="flex justify-center gap-5 bg-white w-full ">
+      <div className="flex flex-col w-3/4 items-center pt-10">
+        <h3 className="text-3xl font-semibold text-indigo-500">
+          Question Details
+        </h3>
+        <QuestionDetails question={question} />
+        <AnswerList
+          answers={question.answers}
+          number_of_answers={question.number_of_answers}
+        />
+        <AddAnswerForm
+          questionId={question.id.toString()}
+          accessToken={accessToken}
+        />
+      </div>
     </main>
   );
 };

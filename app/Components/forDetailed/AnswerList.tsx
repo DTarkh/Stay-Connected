@@ -10,9 +10,17 @@ interface Answer {
   created_at: string;
 }
 
-const AnswerList = ({ answers, number_of_answers }: { answers: Answer[], number_of_answers: number }) => (
+const AnswerList = ({
+  answers,
+  number_of_answers,
+}: {
+  answers: Answer[];
+  number_of_answers: number;
+}) => (
   <div className="mt-6 w-full border-2 border-gray-700 p-4 rounded-lg">
-    <h2 className="text-xl font-semibold">Answers ({number_of_answers})</h2>
+    <h2 className="text-xl font-semibold text-gray-600">
+      Answers ({number_of_answers})
+    </h2>
     {answers.length > 0 ? (
       answers.map((answer) => (
         <div key={answer.id} className="border-b-2 p-4">
